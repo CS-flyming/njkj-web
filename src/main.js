@@ -8,7 +8,7 @@ import Util from "./libs/util";
 import "@/locale";
 import "iview/dist/styles/iview.css";
 import VueI18n from "vue-i18n";
-
+import { ApiUrl } from "./constants/constant";
 import Device from "./plugins/device";
 import Alert from "./plugins/alert";
 import Message from "./plugins/message";
@@ -29,35 +29,36 @@ Vue.use(QueryFilter);
 Vue.use(CheckPermission);
 
 Vue.prototype.$util = Util;
+Vue.prototype.$ApiUrl = ApiUrl;
 new Vue({
-    el: "#app",
-    router: router,
-    store: store,
-    render: h => h(App),
-    data: {
-        currentPageName: ""
-    },
-    mounted() {
-        this.currentPageName = this.$route.name;
-        //存储用户信息
-        this.$store.commit("saveUserInfo");
-        // 显示打开的页面的列表
-        this.$store.commit("setOpenedList");
-        this.$store.commit("initCachepage");
-        // 权限菜单过滤相关
-        // this.$store.commit("updateMenulist");
-        // iview-admin检查更新
-        // util.checkUpdate(this);
-    },
-    created() {
-        let tagsList = [];
-        appRouter.map(item => {
-            if (item.children.length <= 1) {
-                tagsList.push(item.children[0]);
-            } else {
-                tagsList.push(...item.children);
-            }
-        });
-        this.$store.commit("setTagsList", tagsList);
-    }
+  el: "#app",
+  router: router,
+  store: store,
+  render: h => h(App),
+  data: {
+    currentPageName: ""
+  },
+  mounted() {
+    this.currentPageName = this.$route.name;
+    //存储用户信息
+    this.$store.commit("saveUserInfo");
+    // 显示打开的页面的列表
+    this.$store.commit("setOpenedList");
+    this.$store.commit("initCachepage");
+    // 权限菜单过滤相关
+    // this.$store.commit("updateMenulist");
+    // iview-admin检查更新
+    // util.checkUpdate(this);
+  },
+  created() {
+    let tagsList = [];
+    appRouter.map(item => {
+      if (item.children.length <= 1) {
+        tagsList.push(item.children[0]);
+      } else {
+        tagsList.push(...item.children);
+      }
+    });
+    this.$store.commit("setTagsList", tagsList);
+  }
 });

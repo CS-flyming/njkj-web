@@ -5,8 +5,17 @@
     <div>
         <Card class="filter-wrap">
             <Form @submit.native.prevent="handleFilter" :model="filter" ref="filterForm" label-position="right" :label-width="120" >
-                <FormItem label="部门名称">
+                <FormItem label="资产名称">
                     <Input v-model="filter.name" clearable/>
+                </FormItem>
+                 <FormItem label="资产编号">
+                    <Input v-model="filter.number" clearable/>
+                </FormItem>
+                <FormItem label="状态" >
+                    <Select  v-model="filter.status"  clearable>
+                        <Option value="1" >使用中</Option>
+                        <Option value="0" >报废</Option>
+                    </Select>
                 </FormItem>
                 <FormItem class="submit">
                     <Button type="primary" html-type="submit">筛选</Button>
@@ -14,7 +23,7 @@
             </Form>
         </Card>
         <div class="data-control">
-            <Button type="primary" @click="$router.push({ name: 'base-dep-add' })">新增部门</Button>
+            <Button type="primary" @click="$router.push({ name: 'assets-add' })">维修单申请</Button>
         </div>
         <Table :loading="loading" border stripe :columns="columns" :data="data"></Table>
         <pagination :total="total" :limit.sync="filter.limit" :offset.sync="filter.offset" @on-load="loadData"></pagination>
@@ -23,25 +32,45 @@
 
 <script>
 import pagination from "components/pagination";
-import { getDepartList } from "@/actions/depart";
+import { getKeepMyList } from "@/actions/depart";
 export default {
-  name: "sys-manager",
+  name: "keep_apply",
   data() {
     return {
       loading: false,
       columns: [
         {
-          key: "name",
-          title: "部门名称"
+          key: "number",
+          title: "编号"
         },
         {
           key: "code",
-          title: "部门编号"
+          title: "维修申请单号"
+        },
+        {
+          key: "departIdName",
+          title: "报修单位"
+        },
+        {
+          key: "createTime",
+          title: "报修时间"
+        },
+        {
+          key: "areaDesc",
+          title: "所属区域"
+        },
+        {
+          key: "statusDesc",
+          title: "状态"
+        },
+        {
+          key: "keepUserId",
+          title: "维修人员"
         },
         {
           type: "action",
           title: "操作",
-          width: 150,
+          width: 180,
           render: (h, params) => {
             return h("div", [
               h(
@@ -54,7 +83,7 @@ export default {
                   on: {
                     click: () => {
                       this.$router.push({
-                        name: "base-dep-edit",
+                        name: "assets-edit",
                         params: {
                           id: params.row.id
                         },
@@ -76,8 +105,31 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.$lf.confirm("是否确认删除该部门？", () => {
-                        deleteRoleById(params.row.id).then(res => {
+                      this.$router.push({
+                        name: "assets-detail",
+                        params: {
+                          id: params.row.id
+                        },
+                        query: {
+                          item: JSON.stringify(params.row)
+                        }
+                      });
+                    }
+                  }
+                },
+                "查看"
+              ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "text",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      this.$lf.confirm("是否确认删除该资产？", () => {
+                        deleteAssetsById(params.row.id).then(res => {
                           this.$lf.message("删除成功", "success");
                           this.loadData();
                         });
@@ -94,7 +146,9 @@ export default {
       filter: {
         limit: 10,
         offset: 0,
-        name: ""
+        name: "",
+        number: "",
+        status: ""
       },
       data: [],
       total: 0
@@ -103,7 +157,7 @@ export default {
   methods: {
     loadData() {
       this.loading = true;
-      getDepartList(this.filter).then(res => {
+      getKeepMyList(this.filter).then(res => {
         this.loading = false;
         this.data = res.data.rows;
         this.total = res.data.total;
