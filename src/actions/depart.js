@@ -90,3 +90,27 @@ export function getVerifyList(params) {
 export function addOrUpdateKeep(params) {
   return $axios.post("/keep/add", params);
 }
+
+/**
+ * 维修申请待审核
+ * @param {*} params
+ */
+export function getKeepApplyVerify(params) {
+  return $axios.post("/keep/apply/verify", params);
+}
+
+/**
+ * 维修审核待审核
+ * @param {*} params
+ */
+export function getKeepAdminVerify(params) {
+  return $axios.post("/keep/admin/verify", params);
+}
+
+/**
+ * 审核维修单
+ * @param {*} params
+ */
+export function shKeepVerify(params) {
+  return $axios.post("/keep/verify", params);
+}

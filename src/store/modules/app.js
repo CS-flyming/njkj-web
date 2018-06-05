@@ -110,7 +110,7 @@ const app = {
         keep: "wrench",
         keep_apply: "wrench",
         keep_apply_refuse: "wrench",
-        keepspeed: "wrench",
+        keep_speed: "wrench",
         check: "arrow-swap",
         stock: "social-buffer"
       };
@@ -119,6 +119,7 @@ const app = {
         if (accessMenuDefer.data.length > 0) {
           accessMenuDefer.data.forEach((item, index) => {
             // accessMenu.push({ item });
+            console.log(item.code);
             accessAppRouter[index] = {
               path: "/" + item.code,
               name: item.code,

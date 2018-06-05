@@ -33,9 +33,9 @@
 <script>
 import pagination from "components/pagination";
 import departSelector from "components/depart-selector";
-import { getKeepApplyVerify } from "@/actions/depart";
+import { getKeepAdminVerify } from "@/actions/depart";
 export default {
-  name: "keep_apply_verify",
+  name: "keep_verify",
   data() {
     return {
       loading: false,
@@ -65,14 +65,67 @@ export default {
           title: "状态"
         },
         {
-          key: "keepUserId",
-          title: "维修人员"
+          key: "number",
+          title: "物品编号"
         },
         {
           type: "action",
           title: "操作",
+          //   width: 180,
           render: (h, params) => {
             return h("div", [
+              //   h(
+              //     "Button",
+              //     {
+              //       props: {
+              //         type: "success",
+              //         size: "small"
+              //       },
+              //       style: {
+              //         marginRight: "5px"
+              //       },
+              //       on: {
+              //         click: () => {
+              //           this.$router.push({
+              //             name: "assets-detail",
+              //             params: {
+              //               id: params.row.id
+              //             },
+              //             query: {
+              //               item: JSON.stringify(params.row)
+              //             }
+              //           });
+              //         }
+              //       }
+              //     },
+              //     "同意"
+              //   ),
+              //   h(
+              //     "Button",
+              //     {
+              //       props: {
+              //         type: "error",
+              //         size: "small"
+              //       },
+              //       style: {
+              //         marginRight: "5px"
+              //       },
+              //       on: {
+              //         click: () => {
+              //           this.$router.push({
+              //             name: "assets-detail",
+              //             params: {
+              //               id: params.row.id
+              //             },
+              //             query: {
+              //               item: JSON.stringify(params.row)
+              //             }
+              //           });
+              //         }
+              //       }
+              //     },
+              //     "驳回"
+              //   ),
               h(
                 "Button",
                 {
@@ -83,12 +136,13 @@ export default {
                   on: {
                     click: () => {
                       this.$router.push({
-                        name: "assets-detail",
+                        name: "keep-detail",
                         params: {
                           id: params.row.id
                         },
                         query: {
-                          item: JSON.stringify(params.row)
+                          item: JSON.stringify(params.row),
+                          from: this.$route.name
                         }
                       });
                     }
@@ -114,7 +168,7 @@ export default {
   methods: {
     loadData() {
       this.loading = true;
-      getKeepApplyVerify(this.filter).then(res => {
+      getKeepAdminVerify(this.filter).then(res => {
         this.loading = false;
         this.data = res.data.rows;
         this.total = res.data.total;

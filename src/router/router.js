@@ -150,6 +150,12 @@ export const otherRouter = {
       component: () => import("@/views/sys/assets/detail.vue")
     },
     {
+      path: "keep/:id/detail",
+      title: "维修单详情",
+      name: "keep-detail",
+      component: () => import("@/views/sys/keep/keep_detail.vue")
+    },
+    {
       path: "agent/manager/add",
       title: "新增业务员",
       name: "agent-manager-add",
@@ -238,8 +244,7 @@ export const otherRouter = {
       title: "客户经理编辑",
       name: "marketing-customer-edit",
       component: () => import("@/views/marketing/customer/edit.vue")
-    }, //     name: 'agent-manager-edit', //     title: '业务员管理编辑', //     path: 'agent/manager/edit', // {
-    //     component: resolve => {
+    }, //     component: resolve => { //     name: 'agent-manager-edit', //     title: '业务员管理编辑', //     path: 'agent/manager/edit', // {
     //         require(['@/views/agent/manager/edit.vue'], resolve);
     //     }
     // },
@@ -386,6 +391,21 @@ export const appRouter = [
         title: "待审核",
         name: "keep_apply_verify",
         component: () => import("@/views/sys/keep/verify.vue")
+      }
+    ]
+  },
+  {
+    path: "/keep",
+    icon: "ios-gear",
+    name: "keep",
+    title: "维修审核",
+    component: Main,
+    children: [
+      {
+        path: "verify",
+        title: "待审核",
+        name: "keep_verify",
+        component: () => import("@/views/sys/keep/keep_verify.vue")
       }
     ]
   },
