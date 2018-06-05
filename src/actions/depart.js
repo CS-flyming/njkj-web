@@ -100,6 +100,14 @@ export function getKeepApplyVerify(params) {
 }
 
 /**
+ * 维修申请拒绝
+ * @param {*} params
+ */
+export function getKeepApplyRefuse(params) {
+  return $axios.post("/keep/apply/refuse", params);
+}
+
+/**
  * 维修审核待审核
  * @param {*} params
  */
@@ -108,9 +116,33 @@ export function getKeepAdminVerify(params) {
 }
 
 /**
+ * 维修审核已驳回
+ * @param {*} params
+ */
+export function getKeepAdminRefuse(params) {
+  return $axios.post("/keep/admin/refuse", params);
+}
+
+/**
  * 审核维修单
  * @param {*} params
  */
 export function shKeepVerify(params) {
   return $axios.post("/keep/verify", params);
+}
+
+/**
+ * 维修进度待维修
+ * @param {*} params 
+ */
+export function getSpeedKeeping(params){
+  return $axios.post("/keep/speed/keeping", params);
+}
+
+/**
+ * 维修进度待维修
+ * @param {*} params 
+ */
+export function getSpeedFinishi(params){
+  return $axios.post("/keep/speed/finish", params);
 }

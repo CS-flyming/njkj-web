@@ -18,8 +18,10 @@
     height: 100%;
 }
 .to-do-list-con{
-    height: 145px;
-    overflow: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 20px;
 }
 .to-do-item{
     padding: 2px;
@@ -43,4 +45,41 @@
 }
 .line-chart-con{
     height: 150px;
+}
+.todo-title,.todo-item{
+    display: flex;
+    align-items: center;
+}
+.finish{
+    background-color: #67d562;
+}
+.refuse{
+    background-color: #f25f39;
+}
+.verify{
+    background-color: #ffd55e;
+}
+.keeping{
+    background-color: #0085ca;
+}
+.icon-ct{
+    background-color: #fff;
+}
+.todo-item{
+    color: #fff;
+    flex: 1;
+    font-size: 16px;
+    padding: 5px 20px;
+    margin: 0 20px;
+}
+.icon-ct{
+    border-radius: 5px;
+    width: 80px;
+    text-align: center;
+}
+.num-ct{
+    margin-left: 30px;
+}
+.num-ct .num{
+    font-size: 22px;
 }

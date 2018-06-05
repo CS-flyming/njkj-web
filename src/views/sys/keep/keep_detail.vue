@@ -4,7 +4,7 @@
         <div slot="title" style='height:32px;line-height:32px;'>
             详情
         </div>
-        <div  slot="extra" >
+        <div  slot="extra" v-if="form.status!=3">
             <Button type="success" @click="goApply">同意</Button>
             <Button type="error" @click="goResuse">驳回</Button>
         </div>
@@ -20,6 +20,12 @@
                     <span class="base-info-item">{{form.departIdName}}</span>
                     <span class="base-info-item">提交报修维修单</span>
                     <span class="base-info-item">{{form.createTime}}</span>
+                </div>
+                 <div style="margin-top:20px;"  v-if="form.status==3">
+                    <Icon type="close-circled" color="#f36042"></Icon>
+                    <span class="base-info-item">{{form.verifyUser||'未知'}}</span>
+                    <span class="base-info-item">驳回了该申请单</span>
+                    <span class="base-info-item">{{form.verifyTime}}</span>
                 </div>
             </div>
             <Tabs value="name1">
@@ -40,8 +46,14 @@
                         </Col>
                     </Row>
                 </TabPane>
-                <TabPane label="问题描述" name="name2">{{form.info||'暂无'}}</TabPane>
-                <TabPane label="维修历史" name="name3">{{form.info||'暂无'}}</TabPane>
+                <template v-if="form.status!=3">
+                    <TabPane label="问题描述" name="name2">{{form.info||'暂无'}}</TabPane>
+                    <TabPane label="维修历史" name="name3">{{form.info||'暂无'}}</TabPane>
+                </template>
+                <template v-else>
+                     <TabPane label="驳回原因" name="name2">{{form.reason||'暂无'}}</TabPane>
+                </template>
+                
             </Tabs>
             
             
@@ -70,6 +82,22 @@
                 </div>
             </div>
         </Modal>
+        <Modal
+            v-model="modal2"
+            title="审核驳回"
+            @on-ok="applyCancel">
+            <div class="model-center">
+                <div>
+                    <Icon size="96" type="close-circled" color="#f36042"></Icon>
+                </div>
+                <div style="color:#f36042;font-size:16px;">
+                    您将驳回该申请，请填写驳回原因
+                </div>
+                <div style="margin-top:20px;">
+                    <Input type="textarea" v-model="bhbz" :rows="4"/>
+                </div>
+            </div>
+        </Modal>
     </Card>
 </template>
 
@@ -83,6 +111,8 @@ export default {
     return {
       loading: false,
       modal1: false,
+      modal2:false,
+      bhbz:'',
       keepUserId: "",
       keepUserArr: [],
       form: {
@@ -130,6 +160,28 @@ export default {
       this.form = JSON.parse(item);
       console.log(this.form);
     },
+    applyCancel(){
+      let { id } = this.$route.params;
+      let { from } = this.$route.query;
+      if (this.bhbz) {
+        shKeepVerify({
+          id,
+          code: "0",
+          reason: this.bhbz
+        }).then(
+          res => {
+            this.loading = false;
+            this.$lf.message("驳回成功", "success");
+            closeCurrentErrPage(this, from);
+          },
+          () => {
+            this.loading = false;
+          }
+        );
+      } else {
+        this.$lf.message("请填写驳回原因", "error");
+      }
+    },
     applyOk() {
       let { id } = this.$route.params;
       let { from } = this.$route.query;
@@ -141,7 +193,7 @@ export default {
         }).then(
           res => {
             this.loading = false;
-            this.$lf.message("审核成功", "success");
+            this.$lf.message("安排维修人员成功", "success");
             closeCurrentErrPage(this, from);
           },
           () => {
@@ -155,7 +207,9 @@ export default {
     goApply() {
       this.modal1 = true;
     },
-    goResuse() {}
+    goResuse() {
+      this.modal2 = true;
+    }
   },
   activated() {
     this.getAssetsDetail();

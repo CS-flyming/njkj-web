@@ -391,7 +391,14 @@ export const appRouter = [
         title: "待审核",
         name: "keep_apply_verify",
         component: () => import("@/views/sys/keep/verify.vue")
-      }
+      },
+      {
+        path: "refuse",
+        title: "已驳回",
+        name: "keep_apply_refuse",
+        component: () => import("@/views/sys/keep/keep_apply_refuse.vue")
+      },
+      
     ]
   },
   {
@@ -406,9 +413,38 @@ export const appRouter = [
         title: "待审核",
         name: "keep_verify",
         component: () => import("@/views/sys/keep/keep_verify.vue")
+      },
+      {
+        path: "refuse",
+        title: "已驳回",
+        name: "keep_refuse",
+        component: () => import("@/views/sys/keep/keep_refuse.vue")
+      }
+      
+    ]
+  },
+  {
+    path: "/keep_speed",
+    icon: "ios-gear",
+    name: "keep_speed",
+    title: "维修审核",
+    component: Main,
+    children: [
+      {
+        path: "keep_speed_wait",
+        title: "待维修",
+        name: "keep_speed_wait",
+        component: () => import("@/views/sys/keep/keep_speed_wait.vue")
+      },
+      {
+        path: "keep_speed_finishi",
+        title: "已完成",
+        name: "keep_speed_finishi",
+        component: () => import("@/views/sys/keep/keep_speed_finishi.vue")
       }
     ]
   },
+  
   {
     path: "/merchant",
     icon: "home",

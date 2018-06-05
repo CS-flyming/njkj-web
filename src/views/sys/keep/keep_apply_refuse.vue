@@ -33,9 +33,9 @@
 <script>
 import pagination from "components/pagination";
 import departSelector from "components/depart-selector";
-import { getKeepAdminVerify, shKeepVerify } from "@/actions/depart";
+import { getKeepApplyRefuse } from "@/actions/depart";
 export default {
-  name: "keep_verify",
+  name: "keep_apply_refuse",
   data() {
     return {
       loading: false,
@@ -126,57 +126,12 @@ export default {
               //     },
               //     "驳回"
               //   ),
-              params.row.status == "0" &&
-                h(
-                  "Poptip",
-                  {
-                    props: {
-                      confirm: true,
-                      title: "您确定要同意该申请?",
-                      transfer: true
-                    },
-                    on: {
-                      "on-ok": () => {
-                        shKeepVerify({
-                          id: params.row.id,
-                          code: "1"
-                        }).then(
-                          res => {
-                            this.loading = false;
-                            this.$lf.message("审核成功", "success");
-                            this.loadData();
-                          },
-                          () => {
-                            this.loading = false;
-                          }
-                        );
-                      }
-                    }
-                  },
-                  [
-                    h(
-                      "Button",
-                      {
-                        style: {
-                          margin: "0 5px"
-                        },
-                        props: {
-                          type: "success",
-                          placement: "top"
-                        }
-                      },
-                      "同意"
-                    )
-                  ]
-                ),
               h(
                 "Button",
                 {
                   props: {
-                    type: "primary"
-                  },
-                  style: {
-                    margin: "0 5px"
+                    type: "primary",
+                    size: "small"
                   },
                   on: {
                     click: () => {
@@ -213,7 +168,7 @@ export default {
   methods: {
     loadData() {
       this.loading = true;
-      getKeepAdminVerify(this.filter).then(res => {
+      getKeepApplyRefuse(this.filter).then(res => {
         this.loading = false;
         this.data = res.data.rows;
         this.total = res.data.total;
