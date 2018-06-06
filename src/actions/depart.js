@@ -146,3 +146,28 @@ export function getSpeedKeeping(params){
 export function getSpeedFinishi(params){
   return $axios.post("/keep/speed/finish", params);
 }
+
+/**
+ * 自主巡检
+ * @param {*} params 
+ */
+export function getPatrolAutoList(params){
+  return $axios.post("/patrol/auto/list",params);
+}
+
+/**
+ * 定期巡检
+ * @param {*} params 
+ */
+export function getPatrolTimeList(params){
+  return $axios.post("/patrol/time/list",params);
+}
+
+/**
+ * 新增编辑异常记录
+ * @param {*} type 
+ * @param {*} params 
+ */
+export function addOrUpdateYichang(type,params){
+  return $axios.post(`/patrol/${type}/save`,params)
+}

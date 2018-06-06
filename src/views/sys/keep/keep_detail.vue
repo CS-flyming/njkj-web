@@ -4,9 +4,12 @@
         <div slot="title" style='height:32px;line-height:32px;'>
             详情
         </div>
-        <div  slot="extra" v-if="form.status!=3">
-            <Button type="success" @click="goApply">同意</Button>
-            <Button type="error" @click="goResuse">驳回</Button>
+        <div  slot="extra" >
+          <div v-if="showBtn">
+              <Button type="success" @click="goApply">同意</Button>
+              <Button type="error" @click="goResuse">驳回</Button>
+          </div>
+           
         </div>
         <div>
             <div class="base-info">
@@ -113,6 +116,8 @@ export default {
       modal1: false,
       modal2:false,
       bhbz:'',
+      userType:'',
+      showBtn:false,
       keepUserId: "",
       keepUserArr: [],
       form: {
@@ -158,7 +163,6 @@ export default {
     getAssetsDetail() {
       let { item } = this.$route.query;
       this.form = JSON.parse(item);
-      console.log(this.form);
     },
     applyCancel(){
       let { id } = this.$route.params;
@@ -212,6 +216,8 @@ export default {
     }
   },
   activated() {
+    this.userType =this.$store.state.user.userInfo&&this.$store.state.user.userInfo.userTypes;
+    this.showBtn =( this.form.status!=3&&this.userType=='0');
     this.getAssetsDetail();
     getKeepUserSelect().then(res => {
       this.keepUserArr = res.data;

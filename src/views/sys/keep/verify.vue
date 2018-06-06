@@ -83,12 +83,13 @@ export default {
                   on: {
                     click: () => {
                       this.$router.push({
-                        name: "assets-detail",
+                        name: "keep-detail",
                         params: {
                           id: params.row.id
                         },
                         query: {
-                          item: JSON.stringify(params.row)
+                          item: JSON.stringify(params.row),
+                          from: this.$route.name
                         }
                       });
                     }
