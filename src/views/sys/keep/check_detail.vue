@@ -21,7 +21,6 @@
                     <p>物品名称：{{form.name||'暂无'}}</p>
                     <p>责任人：{{form.chargeUser||'暂无'}}</p>
                     <p>巡检人：{{form.patrolUser||'暂无'}}</p>
-                    <p>状态：{{form.statusDesc||'暂无'}}</p>
                     <p>备注：{{form.info||'暂无'}}</p>
                 </Col>
             </Row>
@@ -47,7 +46,6 @@
                     <p>物品名称：{{form.name||'暂无'}}</p>
                     <p>责任人：{{form.chargeUser||'暂无'}}</p>
                     <p>巡检人：{{form.patrolUser||'暂无'}}</p>
-                    <p>状态：{{form.statusDesc||'暂无'}}</p>
                     <p>备注：{{form.info||'暂无'}}</p>
                 </Col>
             </Row>
