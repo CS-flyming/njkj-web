@@ -136,7 +136,20 @@ export const otherRouter = {
       title: "维修单详情",
       name: "keep-detail",
       component: () => import("@/views/sys/keep/keep_detail.vue")
+    },
+    {
+      path: "check/:id/edit",
+      title: "巡检编辑",
+      name: "check-detail-edit",
+      component: () => import("@/views/sys/keep/check_detail_edit.vue")
+    },
+    {
+      path: "check/:id/detail",
+      title: "巡检详情",
+      name: "check-detail",
+      component: () => import("@/views/sys/keep/check_detail.vue")
     }
+    
   ]
 };
 

@@ -33,7 +33,7 @@
 <script>
 import pagination from "components/pagination";
 import departSelector from "components/depart-selector";
-import { getPatrolAutoList } from "@/actions/depart";
+import { getPatrolAutoList, deletePatrol } from "@/actions/depart";
 export default {
   name: "check_apply",
   data() {
@@ -52,13 +52,17 @@ export default {
           key: "areaName",
           title: "所属区域"
         },
-         {
+        {
           key: "place",
           title: "位置"
         },
         {
           key: "name",
           title: "物品名称"
+        },
+         {
+          key: "phone",
+          title: "联系方式"
         },
         {
           key: "chargeUser",
@@ -71,35 +75,35 @@ export default {
         {
           type: "action",
           title: "操作",
-          //   width: 180,
+          width: 240,
           render: (h, params) => {
             return h("div", [
-              //   h(
-              //     "Button",
-              //     {
-              //       props: {
-              //         type: "success",
-              //         size: "small"
-              //       },
-              //       style: {
-              //         marginRight: "5px"
-              //       },
-              //       on: {
-              //         click: () => {
-              //           this.$router.push({
-              //             name: "assets-detail",
-              //             params: {
-              //               id: params.row.id
-              //             },
-              //             query: {
-              //               item: JSON.stringify(params.row)
-              //             }
-              //           });
-              //         }
-              //       }
-              //     },
-              //     "同意"
-              //   ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "primary"
+                  },
+                  style: {
+                    marginRight: "5px"
+                  },
+                  on: {
+                    click: () => {
+                      this.$router.push({
+                        name: "check-detail-edit",
+                        params: {
+                          id: params.row.id
+                        },
+                        query: {
+                          item: JSON.stringify(params.row),
+                          from:this.$route.name
+                        }
+                      });
+                    }
+                  }
+                },
+                "编辑"
+              ),
               //   h(
               //     "Button",
               //     {
@@ -126,54 +130,50 @@ export default {
               //     },
               //     "驳回"
               //   ),
-              params.row.status == "0" &&
-                h(
-                  "Poptip",
-                  {
-                    props: {
-                      confirm: true,
-                      title: "您确定要同意该申请?",
-                      transfer: true
-                    },
-                    on: {
-                      "on-ok": () => {
-                        // shKeepVerify({
-                        //   id: params.row.id,
-                        //   code: "1"
-                        // }).then(
-                        //   res => {
-                        //     this.loading = false;
-                        //     this.$lf.message("审核成功", "success");
-                        //     this.loadData();
-                        //   },
-                        //   () => {
-                        //     this.loading = false;
-                        //   }
-                        // );
-                      }
-                    }
+              h(
+                "Poptip",
+                {
+                  props: {
+                    confirm: true,
+                    title: "您确定要删除?",
+                    transfer: true
                   },
-                  [
-                    h(
-                      "Button",
-                      {
-                        style: {
-                          margin: "0 5px"
+                  on: {
+                    "on-ok": () => {
+                      deletePatrol(params.row.id).then(
+                        res => {
+                          this.loading = false;
+                          this.$lf.message("删除成功", "success");
+                          this.loadData();
                         },
-                        props: {
-                          type: "success",
-                          placement: "top"
+                        () => {
+                          this.loading = false;
                         }
+                      );
+                    }
+                  }
+                },
+                [
+                  h(
+                    "Button",
+                    {
+                      style: {
+                        margin: "0 5px"
                       },
-                      "同意"
-                    )
-                  ]
-                ),
+                      props: {
+                        type: "error",
+                        placement: "top"
+                      }
+                    },
+                    "删除"
+                  )
+                ]
+              ),
               h(
                 "Button",
                 {
                   props: {
-                    type: "primary"
+                    type: "warning"
                   },
                   style: {
                     margin: "0 5px"
@@ -181,7 +181,7 @@ export default {
                   on: {
                     click: () => {
                       this.$router.push({
-                        name: "keep-detail",
+                        name: "check-detail",
                         params: {
                           id: params.row.id
                         },

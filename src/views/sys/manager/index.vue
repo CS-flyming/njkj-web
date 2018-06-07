@@ -40,12 +40,10 @@ export default {
         {
           key: "name",
           title: "登录账号",
-          width: 150
         },
         {
           key: "typesDesc",
           title: "所属角色",
-          width: 150
         },
         {
           title: "角色信息",
@@ -58,75 +56,78 @@ export default {
           title: "状态",
           width: 80
         },
-        {
-          type: "action",
-          title: "操作",
-          width: 200,
-          render: (h, params) => {
-            return h("div", [
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "text",
-                    size: "small"
-                  },
-                  on: {
-                    click: () => {
-                      this.$router.push({
-                        name: "sys-manager-edit",
-                        params: {
-                          id: params.row.id
-                        }
-                      });
-                    }
-                  }
-                },
-                "编辑"
-              ),
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "text",
-                    size: "small"
-                  },
-                  on: {
-                    click: () => {
-                      this.$lf.confirm("确认要密码重置吗？", () => {
-                        resetManagerPwdById(params.row.id).then(res => {
-                          this.$lf.message("密码重置成功", "success");
-                        });
-                      });
-                    }
-                  }
-                },
-                "重置密码"
-              ),
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "text",
-                    size: "small"
-                  },
-                  on: {
-                    click: () => {
-                      this.$lf.confirm("是否确认删除该操作员？", () => {
-                        deleteManagerById(params.row.id).then(res => {
-                          this.$lf.message("删除成功", "success");
-                          // this.data.splice(params.index, 1);
-                          this.loadData();
-                        });
-                      });
-                    }
-                  }
-                },
-                "删除"
-              )
-            ]);
-          }
-        }
+        // {
+        //   type: "action",
+        //   title: "操作",
+        //   width: 200,
+        //   render: (h, params) => {
+        //     return h("div", [
+              // h(
+              //   "Button",
+              //   {
+              //     props: {
+              //       type: "text",
+              //       size: "small"
+              //     },
+              //     on: {
+              //       click: () => {
+              //         this.$router.push({
+              //           name: "sys-manager-edit",
+              //           params: {
+              //             id: params.row.id
+              //           },
+              //           query:{
+              //             item:JSON.stringify(params.row)
+              //           }
+              //         });
+              //       }
+              //     }
+              //   },
+              //   "编辑"
+              // ),
+              // h(
+              //   "Button",
+              //   {
+              //     props: {
+              //       type: "text",
+              //       size: "small"
+              //     },
+              //     on: {
+              //       click: () => {
+              //         this.$lf.confirm("确认要密码重置吗？", () => {
+              //           resetManagerPwdById(params.row.id).then(res => {
+              //             this.$lf.message("密码重置成功", "success");
+              //           });
+              //         });
+              //       }
+              //     }
+              //   },
+              //   "重置密码"
+              // ),
+              // h(
+              //   "Button",
+              //   {
+              //     props: {
+              //       type: "text",
+              //       size: "small"
+              //     },
+              //     on: {
+              //       click: () => {
+              //         this.$lf.confirm("是否确认删除该操作员？", () => {
+              //           deleteManagerById(params.row.id).then(res => {
+              //             this.$lf.message("删除成功", "success");
+              //             // this.data.splice(params.index, 1);
+              //             this.loadData();
+              //           });
+              //         });
+              //       }
+              //     }
+              //   },
+              //   "删除"
+              // )
+            // ]);
+        //   }
+        // }
       ],
       filter: {
         limit: 10,

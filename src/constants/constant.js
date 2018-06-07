@@ -14,13 +14,13 @@ export const ApiUrl =
 
 const uploadMaxSize = 1024;
 export const uploadConfig = {
-    accept: "image/*",
+    accept: "",
     headers: {
         Authorization: "Bearer " + Cookies.get("token")
     },
     name: "file",
     maxSize: uploadMaxSize,
-    serviceUrl: `${ApiUrl}/sys/image/upload`
+    serviceUrl: `${ApiUrl}/upload`
 };
 axios.defaults.baseURL = ApiUrl;
 // axios.defaults.withCredentials = true;

@@ -171,3 +171,12 @@ export function getPatrolTimeList(params){
 export function addOrUpdateYichang(type,params){
   return $axios.post(`/patrol/${type}/save`,params)
 }
+
+
+/**
+ * 删除巡检
+ * @param {*} id 
+ */
+export function deletePatrol(id){
+  return $axios.post(`/patrol/delete/${id}`)
+}

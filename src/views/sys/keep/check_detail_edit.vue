@@ -34,21 +34,6 @@
             <FormItem label="联系电话" prop="phone">
                 <Input v-model="form.phone" placeholder="联系电话"  />
             </FormItem>
-            <FormItem label="上传附件">
-                <Upload 
-                    ref="upload"
-                    :action="upload.serviceUrl" 
-                    :headers="upload.headers" 
-                    :with-credentials="true"
-                    :on-success="handleSuccess"
-                    :on-error="handleError"
-                    multiple
-
-                    >
-                    <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
-                </Upload>
-
-            </FormItem>
              <FormItem label="巡检人">
                 <Input v-model="form.patrolUser" placeholder="巡检人"  />
             </FormItem>
@@ -63,15 +48,14 @@
 </template>
 
 <script>
-import { closeCurrentErrPage,uploadConfig } from "@/constants/constant";
+import { closeCurrentErrPage } from "@/constants/constant";
 import departSelector from "components/depart-selector";
 import { addOrUpdateYichang } from "@/actions/depart";
 export default {
-  name: "check-add",
+  name: "check-detail-edit",
   data() {
     return {
       loading: false,
-      upload:uploadConfig,
       form: {
         name: "",
         number: "",
@@ -123,18 +107,12 @@ export default {
     };
   },
   methods: {
-    handleRemove (file) {
-        const fileList = this.$refs.upload.fileList;
-        this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
-    },
-    handleSuccess (res, file) {
-        console.log(res,file)
-    },
-    handleError(error, file, fileList){
-       this.$lf.message("上传出错", "error");
+    getAssetsDetail() {
+      let { item } = this.$route.query;
+      this.form = JSON.parse(item);
     },
     submit(e) {
-      let { name } = this.$route.query;
+      let { from } = this.$route.query;
       let type = name=='check_apply'?'auto':'time';
       this.$refs.form.validate(valid => {
         if (valid) {
@@ -145,7 +123,7 @@ export default {
               this.loading = false;
               this.$lf.message("保存成功", "success");
               this.$refs.form.resetFields();
-              closeCurrentErrPage(this, name);
+              closeCurrentErrPage(this, from);
             },
             () => {
               this.loading = false;
@@ -154,6 +132,9 @@ export default {
         }
       });
     }
+  },
+  activated() {
+    this.getAssetsDetail();
   },
   components: {
     departSelector

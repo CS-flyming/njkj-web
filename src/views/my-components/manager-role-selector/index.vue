@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import { getSysRoles } from "@/actions/selector";
 export default {
     name: "manager-role-selector",
     props: {

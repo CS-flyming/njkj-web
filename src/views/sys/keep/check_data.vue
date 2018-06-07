@@ -33,7 +33,7 @@
 <script>
 import pagination from "components/pagination";
 import departSelector from "components/depart-selector";
-import { getPatrolTimeList } from "@/actions/depart";
+import { getPatrolTimeList,deletePatrol } from "@/actions/depart";
 export default {
   name: "check_data",
   data() {
@@ -60,6 +60,10 @@ export default {
           key: "name",
           title: "物品名称"
         },
+         {
+          key: "phone",
+          title: "联系方式"
+        },
         {
           key: "chargeUser",
           title: "责任人"
@@ -71,35 +75,35 @@ export default {
         {
           type: "action",
           title: "操作",
-          //   width: 180,
+          width: 240,
           render: (h, params) => {
             return h("div", [
-              //   h(
-              //     "Button",
-              //     {
-              //       props: {
-              //         type: "success",
-              //         size: "small"
-              //       },
-              //       style: {
-              //         marginRight: "5px"
-              //       },
-              //       on: {
-              //         click: () => {
-              //           this.$router.push({
-              //             name: "assets-detail",
-              //             params: {
-              //               id: params.row.id
-              //             },
-              //             query: {
-              //               item: JSON.stringify(params.row)
-              //             }
-              //           });
-              //         }
-              //       }
-              //     },
-              //     "同意"
-              //   ),
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                    },
+                    style: {
+                      marginRight: "5px"
+                    },
+                    on: {
+                      click: () => {
+                        this.$router.push({
+                          name: "check-detail-edit",
+                          params: {
+                            id: params.row.id
+                          },
+                          query: {
+                            item: JSON.stringify(params.row),
+                            from:this.$route.name
+                          }
+                        });
+                      }
+                    }
+                  },
+                  "编辑"
+                ),
               //   h(
               //     "Button",
               //     {
@@ -126,18 +130,26 @@ export default {
               //     },
               //     "驳回"
               //   ),
-              params.row.status == "0" &&
-                h(
+               h(
                   "Poptip",
                   {
                     props: {
                       confirm: true,
-                      title: "您确定要同意该申请?",
+                      title: "您确定要删除?",
                       transfer: true
                     },
                     on: {
                       "on-ok": () => {
-                       
+                        deletePatrol( params.row.id).then(
+                          res => {
+                            this.loading = false;
+                            this.$lf.message("删除成功", "success");
+                            this.loadData();
+                          },
+                          () => {
+                            this.loading = false;
+                          }
+                        );
                       }
                     }
                   },
@@ -149,11 +161,11 @@ export default {
                           margin: "0 5px"
                         },
                         props: {
-                          type: "success",
+                          type: "error",
                           placement: "top"
                         }
                       },
-                      "同意"
+                      "删除"
                     )
                   ]
                 ),
@@ -161,7 +173,7 @@ export default {
                 "Button",
                 {
                   props: {
-                    type: "primary"
+                    type: "warning"
                   },
                   style: {
                     margin: "0 5px"
@@ -169,7 +181,7 @@ export default {
                   on: {
                     click: () => {
                       this.$router.push({
-                        name: "keep-detail",
+                        name: "check-detail",
                         params: {
                           id: params.row.id
                         },
