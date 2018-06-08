@@ -33,7 +33,7 @@
 <script>
 import pagination from "components/pagination";
 import departSelector from "components/depart-selector";
-import { getPatrolTimeList,deletePatrol } from "@/actions/depart";
+import { getPatrolTimeList, deletePatrol } from "@/actions/depart";
 export default {
   name: "check_data",
   data() {
@@ -52,7 +52,7 @@ export default {
           key: "areaName",
           title: "所属区域"
         },
-         {
+        {
           key: "place",
           title: "位置"
         },
@@ -60,7 +60,7 @@ export default {
           key: "name",
           title: "物品名称"
         },
-         {
+        {
           key: "phone",
           title: "联系方式"
         },
@@ -78,32 +78,31 @@ export default {
           width: 240,
           render: (h, params) => {
             return h("div", [
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "primary",
-                    },
-                    style: {
-                      marginRight: "5px"
-                    },
-                    on: {
-                      click: () => {
-                        this.$router.push({
-                          name: "check-detail-edit",
-                          params: {
-                            id: params.row.id
-                          },
-                          query: {
-                            item: JSON.stringify(params.row),
-                            from:this.$route.name
-                          }
-                        });
-                      }
-                    }
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "primary"
                   },
-                  "编辑"
-                ),
+                  style: {
+                    marginRight: "5px"
+                  },
+                  on: {
+                    click: () => {
+                      this.$router.push({
+                        name: "check-detail-edit",
+                        params: {
+                          id: params.row.id
+                        },
+                        query: {
+                          from: this.$route.name
+                        }
+                      });
+                    }
+                  }
+                },
+                "编辑"
+              ),
               //   h(
               //     "Button",
               //     {
@@ -130,45 +129,45 @@ export default {
               //     },
               //     "驳回"
               //   ),
-               h(
-                  "Poptip",
-                  {
-                    props: {
-                      confirm: true,
-                      title: "您确定要删除?",
-                      transfer: true
-                    },
-                    on: {
-                      "on-ok": () => {
-                        deletePatrol( params.row.id).then(
-                          res => {
-                            this.loading = false;
-                            this.$lf.message("删除成功", "success");
-                            this.loadData();
-                          },
-                          () => {
-                            this.loading = false;
-                          }
-                        );
-                      }
-                    }
+              h(
+                "Poptip",
+                {
+                  props: {
+                    confirm: true,
+                    title: "您确定要删除?",
+                    transfer: true
                   },
-                  [
-                    h(
-                      "Button",
-                      {
-                        style: {
-                          margin: "0 5px"
+                  on: {
+                    "on-ok": () => {
+                      deletePatrol(params.row.id).then(
+                        res => {
+                          this.loading = false;
+                          this.$lf.message("删除成功", "success");
+                          this.loadData();
                         },
-                        props: {
-                          type: "error",
-                          placement: "top"
+                        () => {
+                          this.loading = false;
                         }
+                      );
+                    }
+                  }
+                },
+                [
+                  h(
+                    "Button",
+                    {
+                      style: {
+                        margin: "0 5px"
                       },
-                      "删除"
-                    )
-                  ]
-                ),
+                      props: {
+                        type: "error",
+                        placement: "top"
+                      }
+                    },
+                    "删除"
+                  )
+                ]
+              ),
               h(
                 "Button",
                 {
@@ -186,7 +185,6 @@ export default {
                           id: params.row.id
                         },
                         query: {
-                          item: JSON.stringify(params.row),
                           from: this.$route.name
                         }
                       });

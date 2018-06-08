@@ -8,7 +8,7 @@ import Util from "./libs/util";
 import "@/locale";
 import "iview/dist/styles/iview.css";
 import VueI18n from "vue-i18n";
-import { ApiUrl } from "./constants/constant";
+import { ApiUrl, downloadByForm } from "./constants/constant";
 import Device from "./plugins/device";
 import Alert from "./plugins/alert";
 import Message from "./plugins/message";
@@ -30,6 +30,7 @@ Vue.use(CheckPermission);
 
 Vue.prototype.$util = Util;
 Vue.prototype.$ApiUrl = ApiUrl;
+Vue.prototype.$downloadByForm = downloadByForm;
 new Vue({
   el: "#app",
   router: router,

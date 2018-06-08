@@ -39,11 +39,10 @@
                     ref="upload"
                     :action="upload.serviceUrl" 
                     :headers="upload.headers" 
-                    :with-credentials="true"
+                    :name= "upload.name"
                     :on-success="handleSuccess"
                     :on-error="handleError"
                     multiple
-
                     >
                     <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
                 </Upload>
@@ -63,7 +62,7 @@
 </template>
 
 <script>
-import { closeCurrentErrPage,uploadConfig } from "@/constants/constant";
+import { closeCurrentErrPage, uploadConfig } from "@/constants/constant";
 import departSelector from "components/depart-selector";
 import { addOrUpdateYichang } from "@/actions/depart";
 export default {
@@ -71,7 +70,7 @@ export default {
   data() {
     return {
       loading: false,
-      upload:uploadConfig,
+      upload: uploadConfig,
       form: {
         name: "",
         number: "",
@@ -79,12 +78,12 @@ export default {
         place: "",
         areaId: "",
         patrolUser: "",
-        chargeUser:"",
+        chargeUser: "",
         phone: "",
         info: ""
       },
       rules: {
-          name: [
+        name: [
           {
             required: true,
             message: "请输入物品名称",
@@ -123,24 +122,27 @@ export default {
     };
   },
   methods: {
-    handleRemove (file) {
-        const fileList = this.$refs.upload.fileList;
-        this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
+    handleSuccess(res, file) {
+      console.log(res, file);
     },
-    handleSuccess (res, file) {
-        console.log(res,file)
-    },
-    handleError(error, file, fileList){
-       this.$lf.message("上传出错", "error");
+    handleError(error, file, fileList) {
+      this.$lf.message("上传出错", "error");
     },
     submit(e) {
       let { name } = this.$route.query;
-      let type = name=='check_apply'?'auto':'time';
+      let type = name == "check_apply" ? "auto" : "time";
       this.$refs.form.validate(valid => {
         if (valid) {
+          const fileList = this.$refs.upload.fileList;
+          let wjIds = [];
+          fileList &&
+            fileList.forEach(el => {
+              wjIds.push(el.response.data);
+            });
           this.loading = true;
           let formData = this.form;
-          addOrUpdateYichang(type,formData).then(
+          formData.wjIds = wjIds || [];
+          addOrUpdateYichang(type, formData).then(
             res => {
               this.loading = false;
               this.$lf.message("保存成功", "success");

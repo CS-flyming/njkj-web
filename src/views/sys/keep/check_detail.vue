@@ -39,14 +39,10 @@
         </div> -->
         <div>
             <Row>
-                <Col span="12" class="padding-20 base-info">
-                    <p>使用单位：{{form.departName||'暂无'}}</p>
-                    <p>所属区域：{{form.areaName||'暂无'}}</p>
-                    <p>位置：{{form.place||'暂无'}}</p>
-                    <p>物品名称：{{form.name||'暂无'}}</p>
-                    <p>责任人：{{form.chargeUser||'暂无'}}</p>
-                    <p>巡检人：{{form.patrolUser||'暂无'}}</p>
-                    <p>备注：{{form.info||'暂无'}}</p>
+                <Col span="8" v-for="(item, index) in form.files" :key="index">
+                  <a href="javascript:void(0);" @click="$downloadByForm('/down/'+item.id)">
+                    {{item.name}}
+                  </a>
                 </Col>
             </Row>
         </div>
@@ -58,18 +54,20 @@
 <script>
 import { closeCurrentErrPage } from "@/constants/constant";
 import departSelector from "components/depart-selector";
-import { getKeepUserSelect, shKeepVerify } from "@/actions/depart";
+import { getParrolDetail } from "@/actions/depart";
 export default {
   name: "check-detail",
   data() {
     return {
-      form:{}
-    }
+      form: {}
+    };
   },
   methods: {
     getAssetsDetail() {
-      let { item } = this.$route.query;
-      this.form = JSON.parse(item);
+      let { id } = this.$route.params;
+      getParrolDetail(id).then(res => {
+        this.form = res.data;
+      });
     },
     applyCancel() {
       let { id } = this.$route.params;
@@ -92,45 +90,10 @@ export default {
       } else {
         this.$lf.message("请填写驳回原因", "error");
       }
-    },
-    applyOk() {
-      let { id } = this.$route.params;
-      let { from } = this.$route.query;
-      if (this.keepUserId) {
-        shKeepVerify({
-          id,
-          code: "1",
-          keepUserId: this.keepUserId
-        }).then(
-          res => {
-            this.loading = false;
-            this.$lf.message("安排维修人员成功", "success");
-            closeCurrentErrPage(this, from);
-          },
-          () => {
-            this.loading = false;
-          }
-        );
-      } else {
-        this.$lf.message("请选择维修人员", "error");
-      }
-    },
-    goApply() {
-      this.modal1 = true;
-    },
-    goResuse() {
-      this.modal2 = true;
     }
   },
   activated() {
-    this.userType =
-      this.$store.state.user.userInfo &&
-      this.$store.state.user.userInfo.userTypes;
-    this.showBtn = this.form.status != 3 && this.userType == "0";
     this.getAssetsDetail();
-    getKeepUserSelect().then(res => {
-      this.keepUserArr = res.data;
-    });
   },
   components: {
     departSelector
@@ -143,7 +106,7 @@ export default {
 }
 .base-info {
   padding: 20px;
-  p{
+  p {
     line-height: 1.8;
   }
 }

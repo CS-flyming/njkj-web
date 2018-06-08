@@ -60,7 +60,7 @@ export default {
           key: "name",
           title: "物品名称"
         },
-         {
+        {
           key: "phone",
           title: "联系方式"
         },
@@ -95,8 +95,7 @@ export default {
                           id: params.row.id
                         },
                         query: {
-                          item: JSON.stringify(params.row),
-                          from:this.$route.name
+                          from: this.$route.name
                         }
                       });
                     }
@@ -186,7 +185,6 @@ export default {
                           id: params.row.id
                         },
                         query: {
-                          item: JSON.stringify(params.row),
                           from: this.$route.name
                         }
                       });

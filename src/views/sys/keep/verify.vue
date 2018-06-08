@@ -71,6 +71,7 @@ export default {
         {
           type: "action",
           title: "操作",
+          width: 200,
           render: (h, params) => {
             return h("div", [
               h(

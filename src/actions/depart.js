@@ -133,50 +133,60 @@ export function shKeepVerify(params) {
 
 /**
  * 维修进度待维修
- * @param {*} params 
+ * @param {*} params
  */
-export function getSpeedKeeping(params){
+export function getSpeedKeeping(params) {
   return $axios.post("/keep/speed/keeping", params);
 }
 
 /**
  * 维修进度待维修
- * @param {*} params 
+ * @param {*} params
  */
-export function getSpeedFinishi(params){
+export function getSpeedFinishi(params) {
   return $axios.post("/keep/speed/finish", params);
 }
 
 /**
  * 自主巡检
- * @param {*} params 
+ * @param {*} params
  */
-export function getPatrolAutoList(params){
-  return $axios.post("/patrol/auto/list",params);
+export function getPatrolAutoList(params) {
+  return $axios.post("/patrol/auto/list", params);
 }
 
 /**
  * 定期巡检
- * @param {*} params 
+ * @param {*} params
  */
-export function getPatrolTimeList(params){
-  return $axios.post("/patrol/time/list",params);
+export function getPatrolTimeList(params) {
+  return $axios.post("/patrol/time/list", params);
 }
 
 /**
  * 新增编辑异常记录
- * @param {*} type 
- * @param {*} params 
+ * @param {*} type
+ * @param {*} params
  */
-export function addOrUpdateYichang(type,params){
-  return $axios.post(`/patrol/${type}/save`,params)
+export function addOrUpdateYichang(type, params) {
+  return $axios.post(`/patrol/${type}/save`, params);
 }
-
 
 /**
  * 删除巡检
- * @param {*} id 
+ * @param {*} id
  */
-export function deletePatrol(id){
-  return $axios.post(`/patrol/delete/${id}`)
+export function deletePatrol(id) {
+  return $axios.post(`/patrol/delete/${id}`);
+}
+
+export function getParrolDetail(id) {
+  return $axios.post(`/patrol/find/${id}`);
+}
+
+/**
+ * 获取首页数据
+ */
+export function getIndexData(params) {
+  return $axios.post("/data/chart", params);
 }
