@@ -126,49 +126,7 @@ export default {
               //     },
               //     "驳回"
               //   ),
-              params.row.status == "0" &&
-                h(
-                  "Poptip",
-                  {
-                    props: {
-                      confirm: true,
-                      title: "您确定要同意该申请?",
-                      transfer: true
-                    },
-                    on: {
-                      "on-ok": () => {
-                        shKeepVerify({
-                          id: params.row.id,
-                          code: "1"
-                        }).then(
-                          res => {
-                            this.loading = false;
-                            this.$lf.message("审核成功", "success");
-                            this.loadData();
-                          },
-                          () => {
-                            this.loading = false;
-                          }
-                        );
-                      }
-                    }
-                  },
-                  [
-                    h(
-                      "Button",
-                      {
-                        style: {
-                          margin: "0 5px"
-                        },
-                        props: {
-                          type: "success",
-                          placement: "top"
-                        }
-                      },
-                      "同意"
-                    )
-                  ]
-                ),
+              
               h(
                 "Button",
                 {

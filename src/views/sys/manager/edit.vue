@@ -23,10 +23,10 @@
                 <Input type="password" v-model="form._rePassword" placeholder="请再次输入密码" ></Input>
             </FormItem> -->
             <FormItem label="姓名" prop="realName" >
-                <Input v-model="form.realName" placeholder="员工姓名"></Input>
+                <Input v-model="form.realName" placeholder="员工姓名"/>
             </FormItem>
             <FormItem label="手机号码" prop="phone" >
-                <Input v-model="form.phone" placeholder="手机号码"></Input>
+                <Input v-model="form.phone" placeholder="手机号码"/>
             </FormItem>
             <!-- <FormItem label="身份证号" prop="certificateNo" >
                 <Input v-model="form.certificateNo" placeholder="身份证号"></Input>
@@ -38,7 +38,7 @@
                 <manager-role-selector v-model="form.types"></manager-role-selector>
             </FormItem>
             <FormItem label="详细信息">
-                <Input type="textarea" v-model="form.info"></Input>
+                <Input type="textarea" v-model="form.info"/>
             </FormItem>
             <FormItem label="状态" prop="state" >
                 <RadioGroup v-model="form.state">
@@ -67,7 +67,7 @@ let defaultForm = {
   name: "",
   certificateNo: "",
   state: 1,
-  types: []
+  types: ""
 };
 export default {
   name: "sys-manager-edit",
@@ -89,7 +89,7 @@ export default {
         name: "",
         certificateNo: "",
         state: 1,
-        types: ["1"],
+        types: "",
         departId: "",
         info: ""
       },
@@ -102,6 +102,13 @@ export default {
             trigger: "blur"
           },
           { validator: valideRePassword, trigger: "blur" }
+        ],
+        types: [
+          {
+            required: true,
+            message: "请选择角色",
+            trigger: "change"
+          }
         ]
       }
     };
@@ -110,13 +117,13 @@ export default {
     getManagerDetail() {
       let { item } = this.$route.query;
       this.form = JSON.parse(item);
+      this.form.state = this.form.status;
     },
     submit(e) {
       this.$refs.form.validate(valid => {
         if (valid) {
           this.loading = true;
           let formData = this.form;
-          formData.types = formData.types.join(",");
           addOrUpdateManager(formData).then(
             res => {
               this.loading = false;
@@ -131,6 +138,9 @@ export default {
         }
       });
     }
+  },
+  activated(){
+    this.getManagerDetail();
   },
   components: {
     managerRoleSelector,

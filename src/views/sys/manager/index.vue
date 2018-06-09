@@ -6,10 +6,10 @@
         <Card class="filter-wrap">
             <Form @submit.native.prevent="handleFilter" :model="filter" ref="filterForm" label-position="right" :label-width="120" >
                 <FormItem label="登录账号">
-                    <Input v-model="filter.name" clearable></Input>
+                    <Input v-model="filter.name" clearable/>
                 </FormItem>
                 <FormItem label="手机号" prop="phone">
-                    <Input v-model="filter.phone" clearable></Input>
+                    <Input v-model="filter.phone" clearable/>
                 </FormItem>
                 <FormItem class="submit">
                     <Button type="primary" html-type="submit">筛选</Button>
@@ -56,78 +56,76 @@ export default {
           title: "状态",
           width: 80
         },
-        // {
-        //   type: "action",
-        //   title: "操作",
-        //   width: 200,
-        //   render: (h, params) => {
-        //     return h("div", [
-              // h(
-              //   "Button",
-              //   {
-              //     props: {
-              //       type: "text",
-              //       size: "small"
-              //     },
-              //     on: {
-              //       click: () => {
-              //         this.$router.push({
-              //           name: "sys-manager-edit",
-              //           params: {
-              //             id: params.row.id
-              //           },
-              //           query:{
-              //             item:JSON.stringify(params.row)
-              //           }
-              //         });
-              //       }
-              //     }
-              //   },
-              //   "编辑"
-              // ),
-              // h(
-              //   "Button",
-              //   {
-              //     props: {
-              //       type: "text",
-              //       size: "small"
-              //     },
-              //     on: {
-              //       click: () => {
-              //         this.$lf.confirm("确认要密码重置吗？", () => {
-              //           resetManagerPwdById(params.row.id).then(res => {
-              //             this.$lf.message("密码重置成功", "success");
-              //           });
-              //         });
-              //       }
-              //     }
-              //   },
-              //   "重置密码"
-              // ),
-              // h(
-              //   "Button",
-              //   {
-              //     props: {
-              //       type: "text",
-              //       size: "small"
-              //     },
-              //     on: {
-              //       click: () => {
-              //         this.$lf.confirm("是否确认删除该操作员？", () => {
-              //           deleteManagerById(params.row.id).then(res => {
-              //             this.$lf.message("删除成功", "success");
-              //             // this.data.splice(params.index, 1);
-              //             this.loadData();
-              //           });
-              //         });
-              //       }
-              //     }
-              //   },
-              //   "删除"
-              // )
-            // ]);
-        //   }
-        // }
+        {
+          type: "action",
+          title: "操作",
+          width: 200,
+          render: (h, params) => {
+            return h("div", [
+              h(
+                "Poptip",
+                {
+                  props: {
+                    confirm: true,
+                    title: "您确定要删除?",
+                    transfer: true
+                  },
+                  on: {
+                    "on-ok": () => {
+                      deleteManagerById(params.row.id).then(
+                        res => {
+                          this.loading = false;
+                          this.$lf.message("删除成功", "success");
+                          this.loadData();
+                        },
+                        () => {
+                          this.loading = false;
+                        }
+                      );
+                    }
+                  }
+                },
+                [
+                  h(
+                    "Button",
+                    {
+                      style: {
+                        margin: "0 5px"
+                      },
+                      props: {
+                        type: "error",
+                        placement: "top"
+                      }
+                    },
+                    "删除"
+                  )
+                ]
+              ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "primary",
+                  },
+                  on: {
+                    click: () => {
+                      this.$router.push({
+                        name: "sys-manager-edit",
+                        params: {
+                          id: params.row.id
+                        },
+                        query: {
+                          item: JSON.stringify(params.row)
+                        }
+                      });
+                    }
+                  }
+                },
+                "编辑"
+              ),
+            ])
+          }
+        }
       ],
       filter: {
         limit: 10,

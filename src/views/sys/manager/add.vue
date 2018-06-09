@@ -17,16 +17,16 @@
                 <Input v-model="form.name" placeholder="登录名称"  />
             </FormItem>
             <FormItem label="登录密码" prop="password" >
-                <Input type="password" v-model="form.password" placeholder="请输入6-18位字符和字母组合的密码" ></Input>
+                <Input type="password" v-model="form.password" placeholder="请输入6-18位字符和字母组合的密码" />
             </FormItem>
             <FormItem label="确认密码" prop="_rePassword">
-                <Input type="password" v-model="form._rePassword" placeholder="请再次输入密码" ></Input>
+                <Input type="password" v-model="form._rePassword" placeholder="请再次输入密码" />
             </FormItem>
             <FormItem label="姓名" prop="realName" >
-                <Input v-model="form.realName" placeholder="员工姓名"></Input>
+                <Input v-model="form.realName" placeholder="员工姓名"/>
             </FormItem>
             <FormItem label="手机号码" prop="phone" >
-                <Input v-model="form.phone" placeholder="手机号码"></Input>
+                <Input v-model="form.phone" placeholder="手机号码"/>
             </FormItem>
             <!-- <FormItem label="身份证号" prop="certificateNo" >
                 <Input v-model="form.certificateNo" placeholder="身份证号"></Input>

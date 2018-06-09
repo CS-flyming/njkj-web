@@ -79,7 +79,7 @@ export default {
               //     {
               //       props: {
               //         type: "success",
-              //         size: "small"
+              //         
               //       },
               //       style: {
               //         marginRight: "5px"
@@ -105,7 +105,7 @@ export default {
               //     {
               //       props: {
               //         type: "error",
-              //         size: "small"
+              //         
               //       },
               //       style: {
               //         marginRight: "5px"
@@ -131,7 +131,7 @@ export default {
                 {
                   props: {
                     type: "primary",
-                    size: "small"
+                    
                   },
                   on: {
                     click: () => {

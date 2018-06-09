@@ -79,7 +79,6 @@ export default {
                 {
                   props: {
                     type: "primary",
-                    size: "small"
                   },
                   on: {
                     click: () => {

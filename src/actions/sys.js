@@ -45,7 +45,7 @@ export function resetManagerPwdById(managerId) {
  * @param {*} managerId
  */
 export function deleteManagerById(managerId) {
-    return $axios.post(`/sys/manager/delete/${managerId}`);
+    return $axios.post(`/root/user/delete/${managerId}`);
 }
 /**
  * 获取登录角色菜单

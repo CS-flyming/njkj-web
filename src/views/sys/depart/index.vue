@@ -48,8 +48,7 @@ export default {
                 "Button",
                 {
                   props: {
-                    type: "text",
-                    size: "small"
+                    type: "primary",
                   },
                   on: {
                     click: () => {

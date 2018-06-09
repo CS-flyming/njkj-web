@@ -73,15 +73,17 @@ export default {
         {
           type: "action",
           title: "操作",
-          width: 180,
+          width: 240,
           render: (h, params) => {
             return h("div", [
               h(
                 "Button",
                 {
                   props: {
-                    type: "text",
-                    size: "small"
+                    type: "primary",
+                  },
+                  style: {
+                    marginRight: "5px"
                   },
                   on: {
                     click: () => {
@@ -103,8 +105,10 @@ export default {
                 "Button",
                 {
                   props: {
-                    type: "text",
-                    size: "small"
+                    type: "warning",
+                  },
+                  style: {
+                    marginRight: "5px"
                   },
                   on: {
                     click: () => {
@@ -123,25 +127,38 @@ export default {
                 "查看"
               ),
               h(
-                "Button",
+                "Poptip",
                 {
                   props: {
-                    type: "text",
-                    size: "small"
+                    confirm: true,
+                    title: "您确定要删除?",
+                    transfer: true
                   },
                   on: {
-                    click: () => {
-                      this.$lf.confirm("是否确认删除该资产？", () => {
-                        deleteAssetsById(params.row.id).then(res => {
+                    "on-ok": () => {
+                      deleteAssetsById(params.row.id).then(res => {
                           this.$lf.message("删除成功", "success");
                           this.loadData();
                         });
-                      });
                     }
                   }
                 },
-                "删除"
-              )
+                [
+                  h(
+                    "Button",
+                    {
+                      style: {
+                        margin: "0 5px"
+                      },
+                      props: {
+                        type: "error",
+                        placement: "top"
+                      }
+                    },
+                    "删除"
+                  )
+                ]
+              ),
             ]);
           }
         }
