@@ -19,10 +19,10 @@
             <FormItem label="物品名称" >
                 <Input v-model="form.name" placeholder="物品名称"  />
             </FormItem>
-            <FormItem label="使用单位" prop="departId">
+            <FormItem label="使用单位" v-if="userType==0">
                 <departSelector v-model="form.departId"></departSelector>
             </FormItem>
-            <FormItem label="所属区域" prop="areaId" >
+            <FormItem label="所属区域">
                 <Select  v-model="form.areaId" >
                     <Option value="0" >办公区</Option>
                     <Option value="1" >生活区</Option>
@@ -32,7 +32,7 @@
                 <Input v-model="form.place" placeholder="物品所在位置"  />
             </FormItem>
             <FormItem label="联系人">
-                <Input v-model="form.person" placeholder="联系电话"  />
+                <Input v-model="form.person" placeholder="联系人"  />
             </FormItem>
             <FormItem label="联系电话" prop="phone">
                 <Input v-model="form.phone" placeholder="联系电话"  />
@@ -97,6 +97,14 @@ export default {
         ]
       }
     };
+  },
+  computed:{
+    userType(){
+      let userType =
+        this.$store.state.user.userInfo &&
+        this.$store.state.user.userInfo.userTypes;
+        return userType
+    }
   },
   methods: {
     submit(e) {

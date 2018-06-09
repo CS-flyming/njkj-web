@@ -190,3 +190,8 @@ export function getParrolDetail(id) {
 export function getIndexData(params) {
   return $axios.post("/data/chart", params);
 }
+
+
+export function subKeepRemark(params){
+  return $axios.post("/keep/remark", params);
+}

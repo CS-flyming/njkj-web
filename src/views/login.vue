@@ -4,11 +4,14 @@
 
 <template>
     <div class="login" @keydown.enter="handleSubmit">
+        <div class="login-title">
+            <h1>营房维修管理系统</h1>
+        </div>
         <div class="login-con">
             <Card :bordered="false">
                 <p slot="title">
                     <Icon type="log-in"></Icon>
-                    营房维修管理系统
+                    欢迎登录
                 </p>
                 <div class="form-con">
                     <Form ref="loginForm" :model="form" :rules="rules">

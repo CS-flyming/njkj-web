@@ -18,7 +18,7 @@ fs.open("./build/env.js", "w", function(err, fd) {
 
 module.exports = merge(webpackBaseConfig, {
     output: {
-        publicPath: "/", // 修改 https://iv...admin 这部分为你的服务器域名
+        publicPath: "/dist/", // 修改 https://iv...admin 这部分为你的服务器域名
         filename: "[name].[hash].js",
         chunkFilename: "[name].[hash].chunk.js"
     },
@@ -57,9 +57,9 @@ module.exports = merge(webpackBaseConfig, {
         // }),
         new CopyWebpackPlugin(
             [
-                {
-                    from: "favicon.ico"
-                },
+                // {
+                //     from: "favicon.ico"
+                // },
                 {
                     from: "src/styles/fonts",
                     to: "fonts"
@@ -77,7 +77,7 @@ module.exports = merge(webpackBaseConfig, {
         ),
         new HtmlWebpackPlugin({
             title: "营房维修管理系统",
-            favicon: "./favicon.ico",
+            // favicon: "./favicon.ico",
             filename: "../index.html",
             template: "!!ejs-loader!./src/template/index.ejs",
             inject: false
