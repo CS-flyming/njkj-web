@@ -31,14 +31,14 @@
             <!-- <FormItem label="身份证号" prop="certificateNo" >
                 <Input v-model="form.certificateNo" placeholder="身份证号"></Input>
             </FormItem> -->
-            <FormItem label="所属部门" :required="form.types==1">
+            <FormItem label="所属部门">
                 <departSelector v-model="form.depatmentId"></departSelector>
             </FormItem>
             <FormItem label="所属角色" prop="types">
                 <manager-role-selector v-model="form.types"></manager-role-selector>
             </FormItem>
             <FormItem label="详细信息">
-                <Input type="textarea" v-model="form.info"></Input>
+                <Input type="textarea" v-model="form.info"/>
             </FormItem>
             <FormItem label="状态" prop="state" >
                 <RadioGroup v-model="form.state">
@@ -119,7 +119,6 @@ export default {
         if (valid) {
           this.loading = true;
           let formData = this.form;
-          formData.types = formData.types.join(",");
           addOrUpdateManager(formData).then(
             res => {
               this.loading = false;
@@ -131,6 +130,8 @@ export default {
               this.loading = false;
             }
           );
+        } else {
+          console.log(valid);
         }
       });
     }
