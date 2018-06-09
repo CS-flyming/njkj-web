@@ -25,7 +25,7 @@
 import pagination from "components/pagination";
 import { getDepartList } from "@/actions/depart";
 export default {
-  name: "sys-manager",
+  name: "base_dep",
   data() {
     return {
       loading: false,
@@ -66,27 +66,27 @@ export default {
                   }
                 },
                 "编辑"
-              ),
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "text",
-                    size: "small"
-                  },
-                  on: {
-                    click: () => {
-                      this.$lf.confirm("是否确认删除该部门？", () => {
-                        deleteRoleById(params.row.id).then(res => {
-                          this.$lf.message("删除成功", "success");
-                          this.loadData();
-                        });
-                      });
-                    }
-                  }
-                },
-                "删除"
               )
+              // h(
+              //   "Button",
+              //   {
+              //     props: {
+              //       type: "text",
+              //       size: "small"
+              //     },
+              //     on: {
+              //       click: () => {
+              //         this.$lf.confirm("是否确认删除该部门？", () => {
+              //           deleteRoleById(params.row.id).then(res => {
+              //             this.$lf.message("删除成功", "success");
+              //             this.loadData();
+              //           });
+              //         });
+              //       }
+              //     }
+              //   },
+              //   "删除"
+              // )
             ]);
           }
         }

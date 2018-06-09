@@ -31,10 +31,10 @@
             <!-- <FormItem label="身份证号" prop="certificateNo" >
                 <Input v-model="form.certificateNo" placeholder="身份证号"></Input>
             </FormItem> -->
-            <FormItem label="所属部门" >
+            <FormItem label="所属部门" :required="form.types==1">
                 <departSelector v-model="form.depatmentId"></departSelector>
             </FormItem>
-            <FormItem label="所属角色">
+            <FormItem label="所属角色" prop="types">
                 <manager-role-selector v-model="form.types"></manager-role-selector>
             </FormItem>
             <FormItem label="详细信息">
@@ -60,77 +60,84 @@ import { addOrUpdateManager, getManagerDetail } from "@/actions/sys";
 import { closeCurrentErrPage } from "@/constants/constant";
 import { validateData } from "./validate";
 let defaultForm = {
-    userName: "",
-    phone: "",
-    password: "",
-    _rePassword: "",
-    name: "",
-    certificateNo: "",
-    state: 1,
-    types: []
+  userName: "",
+  phone: "",
+  password: "",
+  _rePassword: "",
+  name: "",
+  certificateNo: "",
+  state: 1,
+  types: ""
 };
 export default {
-    name: "sys-manager-add",
-    data() {
-        const valideRePassword = (rule, value, callback) => {
-            if (value !== this.form.password) {
-                callback(new Error("两次输入密码不一致"));
-            } else {
-                callback();
-            }
-        };
-        return {
-            loading: false,
-            form: {
-                userName: "",
-                phone: "",
-                password: "",
-                _rePassword: "",
-                name: "",
-                certificateNo: "",
-                state: 1,
-                types: ["1"],
-                departId: "",
-                info: ""
+  name: "sys-manager-add",
+  data() {
+    const valideRePassword = (rule, value, callback) => {
+      if (value !== this.form.password) {
+        callback(new Error("两次输入密码不一致"));
+      } else {
+        callback();
+      }
+    };
+    return {
+      loading: false,
+      form: {
+        userName: "",
+        phone: "",
+        password: "",
+        _rePassword: "",
+        name: "",
+        certificateNo: "",
+        state: 1,
+        types: "",
+        departId: "",
+        info: ""
+      },
+      rules: {
+        ...validateData,
+        _rePassword: [
+          {
+            required: true,
+            message: "请填写确认密码",
+            trigger: "blur"
+          },
+          { validator: valideRePassword, trigger: "blur" }
+        ],
+        types: [
+          {
+            required: true,
+            message: "请选择角色",
+            trigger: "change"
+          }
+        ]
+      }
+    };
+  },
+  methods: {
+    submit(e) {
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          this.loading = true;
+          let formData = this.form;
+          formData.types = formData.types.join(",");
+          addOrUpdateManager(formData).then(
+            res => {
+              this.loading = false;
+              this.$refs.form.resetFields();
+              this.$lf.message("保存成功", "success");
+              closeCurrentErrPage(this, "base_user");
             },
-            rules: {
-                ...validateData,
-                _rePassword: [
-                    {
-                        required: true,
-                        message: "请填写确认密码",
-                        trigger: "blur"
-                    },
-                    { validator: valideRePassword, trigger: "blur" }
-                ]
+            () => {
+              this.loading = false;
             }
-        };
-    },
-    methods: {
-        submit(e) {
-            this.$refs.form.validate(valid => {
-                if (valid) {
-                    this.loading = true;
-                    let formData = this.form;
-                    formData.types = formData.types.join(",");
-                    addOrUpdateManager(formData).then(
-                        res => {
-                            this.loading = false;
-                            this.$refs.form.resetFields();
-                            this.$lf.message("保存成功", "success");
-                            closeCurrentErrPage(this, "base_user");
-                        },
-                        () => {
-                            this.loading = false;
-                        }
-                    );
-                }
-            });
+          );
         }
-    },
-    components: {
-        managerRoleSelector,
-        departSelector
+      });
     }
+  },
+  components: {
+    managerRoleSelector,
+    departSelector
+  }
 };
 </script>

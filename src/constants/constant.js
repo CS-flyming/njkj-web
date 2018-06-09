@@ -5,11 +5,10 @@ import store from "../store";
 import env from "../../build/env";
 import qs from "qs";
 export const ApiUrl =
-  env === "development"
-    ? // "http://172.16.7.119:8080/zjhb"
-      "http://106.14.180.49:9001"
+  env === "development" // "http://172.16.7.119:8080/zjhb"
+    ? "http://106.14.180.49:9001"
     : env === "production"
-      ? "http://localhost:9001"
+      ? "http://106.14.180.49:9001"
       : "http://120.77.147.241:10000/mock/59db10974720a62cc0517952";
 
 const uploadMaxSize = 1024;
