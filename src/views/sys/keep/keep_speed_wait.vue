@@ -79,7 +79,7 @@ export default {
               //     {
               //       props: {
               //         type: "success",
-              //         
+              //
               //       },
               //       style: {
               //         marginRight: "5px"
@@ -105,7 +105,7 @@ export default {
               //     {
               //       props: {
               //         type: "error",
-              //         
+              //
               //       },
               //       style: {
               //         marginRight: "5px"
@@ -130,8 +130,7 @@ export default {
                 "Button",
                 {
                   props: {
-                    type: "primary",
-                    
+                    type: "primary"
                   },
                   on: {
                     click: () => {
@@ -141,7 +140,6 @@ export default {
                           id: params.row.id
                         },
                         query: {
-                          item: JSON.stringify(params.row),
                           from: this.$route.name
                         }
                       });
