@@ -9,7 +9,13 @@
               <Button type="success" @click="goApply">同意</Button>
               <Button type="error" @click="goResuse">驳回</Button>
           </div>
-           
+          <div v-if="showBtn1">
+              <Button type="success" @click="goApply1">完成</Button>
+              <Button type="error" @click="goResuse">驳回</Button>
+          </div>
+          <div v-if="showBtn2">
+              <Button type="success" @click="goApply2">添加评论</Button>
+          </div>
         </div>
         <div>
             <div class="base-info">
@@ -47,6 +53,7 @@
                         <div class="wx-item" v-for="(item, index) in history" :key="index">
                           <p style="padding:10px;">{{item}}</p>
                         </div>
+                        <p style="padding:10px;" v-if="!history.length">暂无数据</p>
                       </div>
                       
                     </TabPane>
@@ -76,9 +83,21 @@
                         <p style="padding:10px;" v-if="!dongtai.length">暂无数据</p>
                       </div>
                     </TabPane>
+                  </template>
+                <template v-if="form.status==2||form.status==3">
+                     <TabPane label="驳回原因" name="name4">{{form.reason||'暂无'}}</TabPane>
                 </template>
-                <template v-else>
-                     <TabPane label="驳回原因" name="name2">{{form.reason||'暂无'}}</TabPane>
+                 <template v-if="form.status==5">
+                     <TabPane label="综合评价" name="name5">
+                       <div style="padding:20px;">
+                         <p>
+                           评价满意度：{{form.remarkDesc||'暂无'}}
+                         </p>
+                         <p style="margin-top:10px;">
+                           评价内容：{{form.remarkInfo||'暂无'}}
+                         </p>
+                       </div>
+                     </TabPane>
                 </template>
                 
             </Tabs>
@@ -109,6 +128,19 @@
             </div>
         </Modal>
         <Modal
+            v-model="modal3"
+            title="完成"
+            @on-ok="applyOk">
+            <div class="model-center">
+                <div>
+                    <Icon size="96" type="checkmark-circled" color="#66d661"></Icon>
+                </div>
+                <div style="color:#66d661;font-size:16px;">
+                    维修单已完成！
+                </div>
+            </div>
+        </Modal>
+        <Modal
             v-model="modal2"
             title="审核驳回"
             @on-ok="applyCancel">
@@ -124,6 +156,26 @@
                 </div>
             </div>
         </Modal>
+         <Modal
+            v-model="modal4"
+            title="评价"
+            @on-ok="applyOk2">
+            <div class="model-center">
+                <div>
+                   <Icon size="96" type="checkmark-circled" color="#66d661"></Icon>
+                </div>
+                <div style="margin-top:20px;">
+                   <RadioGroup v-model="plForm.remark">
+                        <Radio label="1">满意</Radio>
+                        <Radio label="2">一般</Radio>
+                        <Radio label="0">不满意</Radio>
+                    </RadioGroup>
+                </div>
+                <div style="margin-top:20px;">
+                    <Input type="textarea" v-model="plForm.remarkInfo" :rows="4"/>
+                </div>
+            </div>
+        </Modal>
     </Card>
 </template>
 
@@ -133,8 +185,10 @@ import departSelector from "components/depart-selector";
 import {
   getKeepUserSelect,
   shKeepVerify,
-  getKeepDetail
+  getKeepDetail,
+  subKeepRemark
 } from "@/actions/depart";
+
 export default {
   name: "keep-detail",
   data() {
@@ -144,11 +198,21 @@ export default {
       modal2: false,
       bhbz: "",
       userType: "",
-      showBtn: false,
+      // showBtn: false,
       keepUserId: "",
       keepUserArr: [],
       dongtai: [],
       history: [],
+      modal3: false,
+      modal4: false,
+      bhbz: "",
+      userType: "",
+      keepUserId: "",
+      keepUserArr: [],
+      plForm: {
+        remark: "1",
+        remarkInfo: ""
+      },
       form: {
         name: "",
         departId: "",
@@ -188,6 +252,26 @@ export default {
       }
     };
   },
+  computed: {
+    showBtn() {
+      let userType =
+        this.$store.state.user.userInfo &&
+        this.$store.state.user.userInfo.userTypes;
+      return this.form.status == "0" && userType == "0";
+    },
+    showBtn1() {
+      let userType =
+        this.$store.state.user.userInfo &&
+        this.$store.state.user.userInfo.userTypes;
+      return this.form.status == "1" && userType == "0";
+    },
+    showBtn2() {
+      let userType =
+        this.$store.state.user.userInfo &&
+        this.$store.state.user.userInfo.userTypes;
+      return this.form.status == "5" && userType == "1";
+    }
+  },
   methods: {
     getAssetsDetail() {
       let { id } = this.$route.params;
@@ -219,10 +303,29 @@ export default {
         this.$lf.message("请填写驳回原因", "error");
       }
     },
+    applyOk2() {
+      let { id } = this.$route.params;
+      let { from } = this.$route.query;
+      subKeepRemark({ id, ...this.plForm }).then(
+        res => {
+          this.loading = false;
+          this.plForm.remark = "1";
+          this.plForm.remarkInfo = "";
+          this.$lf.message("操作成功", "success");
+          closeCurrentErrPage(this, from);
+        },
+        () => {
+          this.loading = false;
+          this.plForm.remark = "1";
+          this.plForm.remarkInfo = "";
+        }
+      );
+    },
     applyOk() {
       let { id } = this.$route.params;
       let { from } = this.$route.query;
-      if (this.keepUserId) {
+      let status = this.form.status;
+      if (status == 1 || this.keepUserId) {
         shKeepVerify({
           id,
           code: "1",
@@ -230,7 +333,7 @@ export default {
         }).then(
           res => {
             this.loading = false;
-            this.$lf.message("安排维修人员成功", "success");
+            this.$lf.message("操作成功", "success");
             closeCurrentErrPage(this, from);
           },
           () => {
@@ -244,15 +347,17 @@ export default {
     goApply() {
       this.modal1 = true;
     },
+    goApply1() {
+      this.modal3 = true;
+    },
+    goApply2() {
+      this.modal4 = true;
+    },
     goResuse() {
       this.modal2 = true;
     }
   },
   activated() {
-    this.userType =
-      this.$store.state.user.userInfo &&
-      this.$store.state.user.userInfo.userTypes;
-    this.showBtn = this.form.status != 3 && this.userType == "0";
     this.getAssetsDetail();
     getKeepUserSelect().then(res => {
       this.keepUserArr = res.data;

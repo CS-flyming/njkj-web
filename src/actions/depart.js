@@ -205,3 +205,7 @@ export function deleteKeep(id) {
 export function getKeepDetail(id) {
   return $axios.post(`/keep/find/${id}`);
 }
+
+export function subKeepRemark(params) {
+  return $axios.post("/keep/remark", params);
+}
