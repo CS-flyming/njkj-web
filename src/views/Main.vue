@@ -29,6 +29,7 @@
                     </div>
                 </div>
                 <div class="header-avator-con">
+                    <Button type="primary"  size="large" style="right: 120px;display: inline-block;margin-left: -40px;" @click="goWeixiu">我要报修</Button>
                     <full-screen v-model="isFullScreen" @on-change="fullscreenChange"></full-screen>
                     <lock-screen></lock-screen>
                     <div class="user-dropdown-menu-con">
@@ -71,128 +72,136 @@ import themeSwitch from "./main-components/theme-switch/theme-switch.vue";
 import util from "@/libs/util.js";
 
 export default {
-    components: {
-        shrinkableMenu,
-        tagsPageOpened,
-        breadcrumbNav,
-        fullScreen,
-        lockScreen,
-        messageTip,
-        themeSwitch
+  components: {
+    shrinkableMenu,
+    tagsPageOpened,
+    breadcrumbNav,
+    fullScreen,
+    lockScreen,
+    messageTip,
+    themeSwitch
+  },
+  data() {
+    return {
+      shrink: false,
+      isFullScreen: false,
+      openedSubmenuArr: this.$store.state.app.openedSubmenuArr
+    };
+  },
+  computed: {
+    menuList() {
+      return this.$store.state.app.menuList;
     },
-    data() {
-        return {
-            shrink: false,
-            isFullScreen: false,
-            openedSubmenuArr: this.$store.state.app.openedSubmenuArr
-        };
+    pageTagsList() {
+      return this.$store.state.app.pageOpenedList; // 打开的页面的页面对象
     },
-    computed: {
-        menuList() {
-            return this.$store.state.app.menuList;
-        },
-        pageTagsList() {
-            return this.$store.state.app.pageOpenedList; // 打开的页面的页面对象
-        },
-        currentPath() {
-            return this.$store.state.app.currentPath; // 当前面包屑数组
-        },
-        avatorPath() {
-            return localStorage.avatorImgPath;
-        },
-        cachePage() {
-            return this.$store.state.app.cachePage;
-        },
-        lang() {
-            return this.$store.state.app.lang;
-        },
-        menuTheme() {
-            return this.$store.state.app.menuTheme;
-        },
-        mesCount() {
-            return this.$store.state.app.messageCount;
-        }
+    currentPath() {
+      return this.$store.state.app.currentPath; // 当前面包屑数组
     },
-    methods: {
-        init() {
-            let pathArr = util.setCurrentPath(this, this.$route.name);
-            this.$store.commit("updateMenulist");
-            if (pathArr.length >= 2) {
-                this.$store.commit("addOpenSubmenu", pathArr[1].name);
-            }
-            this.checkTag(this.$route.name);
-        },
-        toggleClick() {
-            this.shrink = !this.shrink;
-        },
-        handleClickUserDropdown(name) {
-            if (name === "ownSpace") {
-                util.openNewPage(this, "account-password");
-                this.$router.push({
-                    name: "account-password"
-                });
-            } else if (name === "loginout") {
-                // 退出登录
-                this.$store.commit("logout", this);
-                this.$store.commit("clearOpenedSubmenu");
-                this.$router.push({
-                    name: "login"
-                });
-            }
-        },
-        checkTag(name) {
-            let openpageHasTag = this.pageTagsList.some(item => {
-                if (item.name === name) {
-                    return true;
-                }
-            });
-            if (!openpageHasTag) {
-                //  解决关闭当前标签后再点击回退按钮会退到当前页时没有标签的问题
-                util.openNewPage(
-                    this,
-                    name,
-                    this.$route.params || {},
-                    this.$route.query || {}
-                );
-            }
-        },
-        handleSubmenuChange(val) {
-            // console.log(val)
-        },
-        beforePush(name) {
-            // if (name === 'accesstest_index') {
-            //     return false;
-            // } else {
-            //     return true;
-            // }
-            return true;
-        },
-        fullscreenChange(isFullScreen) {
-            // console.log(isFullScreen);
-        }
+    avatorPath() {
+      return localStorage.avatorImgPath;
     },
-    watch: {
-        $route(to) {
-            this.$store.commit("setCurrentPageName", to.name);
-            let pathArr = util.setCurrentPath(this, to.name);
-            if (pathArr.length > 2) {
-                this.$store.commit("addOpenSubmenu", pathArr[1].name);
-            }
-            this.checkTag(to.name);
-            localStorage.currentPageName = to.name;
-        },
-        lang() {
-            util.setCurrentPath(this, this.$route.name); // 在切换语言时用于刷新面包屑
-        }
+    cachePage() {
+      return this.$store.state.app.cachePage;
     },
-    mounted() {
-        this.init();
+    lang() {
+      return this.$store.state.app.lang;
     },
-    created() {
-        // 显示打开的页面的列表
-        let name = this.$store.state.user.userInfo;
-        this.userName = name;
-        this.$store.commit("setOpenedList");
+    menuTheme() {
+      return this.$store.state.app.menuTheme;
+    },
+    mesCount() {
+      return this.$store.state.app.messageCount;
     }
+  },
+  methods: {
+    init() {
+      let pathArr = util.setCurrentPath(this, this.$route.name);
+      this.$store.commit("updateMenulist");
+      if (pathArr.length >= 2) {
+        this.$store.commit("addOpenSubmenu", pathArr[1].name);
+      }
+      this.checkTag(this.$route.name);
+    },
+    toggleClick() {
+      this.shrink = !this.shrink;
+    },
+    handleClickUserDropdown(name) {
+      if (name === "ownSpace") {
+        util.openNewPage(this, "account-password");
+        this.$router.push({
+          name: "account-password"
+        });
+      } else if (name === "loginout") {
+        // 退出登录
+        this.$store.commit("logout", this);
+        this.$store.commit("clearOpenedSubmenu");
+        this.$router.push({
+          name: "login"
+        });
+      }
+    },
+    checkTag(name) {
+      let openpageHasTag = this.pageTagsList.some(item => {
+        if (item.name === name) {
+          return true;
+        }
+      });
+      if (!openpageHasTag) {
+        //  解决关闭当前标签后再点击回退按钮会退到当前页时没有标签的问题
+        util.openNewPage(
+          this,
+          name,
+          this.$route.params || {},
+          this.$route.query || {}
+        );
+      }
+    },
+    handleSubmenuChange(val) {
+      // console.log(val)
+    },
+    beforePush(name) {
+      // if (name === 'accesstest_index') {
+      //     return false;
+      // } else {
+      //     return true;
+      // }
+      return true;
+    },
+    fullscreenChange(isFullScreen) {
+      // console.log(isFullScreen);
+    },
+    goWeixiu() {
+      this.$router.push({
+        name: "keep-apply-add",
+        query: {
+          name: this.$route.name
+        }
+      });
+    }
+  },
+  watch: {
+    $route(to) {
+      this.$store.commit("setCurrentPageName", to.name);
+      let pathArr = util.setCurrentPath(this, to.name);
+      if (pathArr.length > 2) {
+        this.$store.commit("addOpenSubmenu", pathArr[1].name);
+      }
+      this.checkTag(to.name);
+      localStorage.currentPageName = to.name;
+    },
+    lang() {
+      util.setCurrentPath(this, this.$route.name); // 在切换语言时用于刷新面包屑
+    }
+  },
+  mounted() {
+    this.init();
+  },
+  created() {
+    // 显示打开的页面的列表
+    let name = this.$store.state.user.userInfo;
+    this.userName = name;
+    this.$store.commit("setOpenedList");
+  }
 };
 </script>

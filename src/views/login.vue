@@ -44,68 +44,59 @@ import { login } from "@/actions/sys";
 import Cookies from "js-cookie";
 
 export default {
-    data() {
-        return {
-            form: {
-                userName: "",
-                password: "",
-                userType: "1",
-                remember: false
+  data() {
+    return {
+      form: {
+        userName: "",
+        password: "",
+        userType: "1",
+        remember: false
+      },
+      loading: false,
+      rules: {
+        userName: [
+          { required: true, message: "账号不能为空", trigger: "blur" }
+        ],
+        password: [{ required: true, message: "密码不能为空", trigger: "blur" }]
+      }
+    };
+  },
+  methods: {
+    handleSubmit() {
+      this.$refs.loginForm.validate(valid => {
+        if (valid) {
+          const form = this.form;
+          this.loading = true;
+          login(form).then(
+            res => {
+              this.loading = false;
+              let user = {
+                id: res.data.id,
+                name: res.data.name,
+                userName: form.userName,
+                userTypes: res.data.userType,
+                userTypeDesc: res.data.userTypeDesc
+              };
+              Cookies.set("user", JSON.stringify(user));
+              Cookies.set("token", res.data.token);
+              if (this.form.remember) {
+                localStorage.setItem("lf_user", JSON.stringify(user));
+                localStorage.setItem("lf_token", res.data.token);
+              }
+              this.$store.commit("saveUserInfo");
+              this.$store.commit("clearAllTags");
+              this.$router.push({
+                name: "home_index"
+              });
             },
-            loading: false,
-            rules: {
-                userName: [
-                    { required: true, message: "账号不能为空", trigger: "blur" }
-                ],
-                password: [
-                    { required: true, message: "密码不能为空", trigger: "blur" }
-                ]
+            err => {
+              this.loading = false;
             }
-        };
-    },
-    methods: {
-        handleSubmit() {
-            this.$refs.loginForm.validate(valid => {
-                if (valid) {
-                    const form = this.form;
-                    this.loading = true;
-                    login(form).then(
-                        res => {
-                            this.loading = false;
-                            let user = {
-                                id: res.data.id,
-                                name: res.data.name,
-                                userName: form.userName,
-                                userType: form.userType,
-                                userTypes: res.data.userType,
-                                userTypeDesc: res.data.userTypeDesc
-                            };
-                            Cookies.set("user", JSON.stringify(user));
-                            Cookies.set("token", res.data.token);
-                            if (this.form.remember) {
-                                localStorage.setItem(
-                                    "lf_user",
-                                    JSON.stringify(user)
-                                );
-                                localStorage.setItem(
-                                    "lf_token",
-                                    res.data.token
-                                );
-                            }
-                            this.$store.commit("saveUserInfo");
-                            this.$store.commit("clearAllTags");
-                            this.$router.push({
-                                name: "home_index"
-                            });
-                        },
-                        err => {
-                            this.loading = false;
-                        }
-                    );
-                }
-            });
+          );
         }
+      });
     }
+  }
 };
 </script>
 

@@ -18,18 +18,6 @@
                     <span class="base-info-item">所属区域：<span>{{form.areaDesc}}</span></span>
                     <span class="base-info-item">状态：<span>{{form.statusDesc}}</span></span>
                 </div>
-                <div style="margin-top:20px;">
-                    <Icon type="checkmark-circled" color="#20be5f"></Icon>
-                    <span class="base-info-item">{{form.departIdName}}</span>
-                    <span class="base-info-item">提交报修维修单</span>
-                    <span class="base-info-item">{{form.createTime}}</span>
-                </div>
-                 <div style="margin-top:20px;"  v-if="form.status==3">
-                    <Icon type="close-circled" color="#f36042"></Icon>
-                    <span class="base-info-item">{{form.verifyUser||'未知'}}</span>
-                    <span class="base-info-item">驳回了该申请单</span>
-                    <span class="base-info-item">{{form.verifyTime}}</span>
-                </div>
             </div>
             <Tabs value="name1">
                 <TabPane label="基本信息" name="name1">
@@ -40,6 +28,9 @@
                             <p>所属区域：{{form.areaDesc||'暂无'}}</p>
                             <p>物品价值：{{form.value||'暂无'}}</p>
                             <p>配发日期：{{form.toTime||'暂无'}}</p>
+                            <p>所在位置：{{form.place||'暂无'}}</p>
+                            <p>联系人：{{form.person||'暂无'}}</p>
+                             <p>联系人电话：{{form.phone||'暂无'}}</p>
                             <p>状态：{{form.statusDesc||'暂无'}}</p>
                             <p>备注：{{form.bz||'暂无'}}</p>
                         </Col>
@@ -51,14 +42,46 @@
                 </TabPane>
                 <template v-if="form.status!=3">
                     <TabPane label="问题描述" name="name2">{{form.info||'暂无'}}</TabPane>
-                    <TabPane label="维修历史" name="name3">{{form.info||'暂无'}}</TabPane>
+                    <TabPane label="维修历史" name="name3">
+                      <div>
+                        <div class="wx-item" v-for="(item, index) in history" :key="index">
+                          <p style="padding:10px;">{{item}}</p>
+                        </div>
+                      </div>
+                      
+                    </TabPane>
+                    <TabPane label="维修动态" name="name4">
+                      <div>
+                        <div class="wx-item" v-for="(item, index) in dongtai" :key="index">
+                          <p style="padding:5px;">
+                            维修时间：{{item.keepTime}}
+                          </p>
+                          <p style="padding:5px;">
+                            维修信息：{{item.info}}
+                          </p>
+                          <p style="padding:5px;">
+                            维修人：{{item.keepUser}}
+                          </p>
+                          <div style="padding:5px;">
+                            <p>附件：</p>
+                              <Row>
+                                  <Col span="8" v-for="(item2, index2) in item.files" :key="index2">
+                                    <a href="javascript:void(0);" @click="$downloadByForm('/down/'+item2.id)">
+                                      {{item2.name}}
+                                    </a>
+                                  </Col>
+                              </Row>
+                          </div>
+                        </div>
+                        <p style="padding:10px;" v-if="!dongtai.length">暂无数据</p>
+                      </div>
+                    </TabPane>
                 </template>
                 <template v-else>
                      <TabPane label="驳回原因" name="name2">{{form.reason||'暂无'}}</TabPane>
                 </template>
                 
             </Tabs>
-            
             
         </div>
         <Modal
@@ -107,19 +130,25 @@
 <script>
 import { closeCurrentErrPage } from "@/constants/constant";
 import departSelector from "components/depart-selector";
-import { getKeepUserSelect, shKeepVerify } from "@/actions/depart";
+import {
+  getKeepUserSelect,
+  shKeepVerify,
+  getKeepDetail
+} from "@/actions/depart";
 export default {
   name: "keep-detail",
   data() {
     return {
       loading: false,
       modal1: false,
-      modal2:false,
-      bhbz:'',
-      userType:'',
-      showBtn:false,
+      modal2: false,
+      bhbz: "",
+      userType: "",
+      showBtn: false,
       keepUserId: "",
       keepUserArr: [],
+      dongtai: [],
+      history: [],
       form: {
         name: "",
         departId: "",
@@ -161,10 +190,14 @@ export default {
   },
   methods: {
     getAssetsDetail() {
-      let { item } = this.$route.query;
-      this.form = JSON.parse(item);
+      let { id } = this.$route.params;
+      getKeepDetail(id).then(res => {
+        this.form = res.data.keep;
+        this.dongtai = res.data.dongtai;
+        this.history = res.data.history;
+      });
     },
-    applyCancel(){
+    applyCancel() {
       let { id } = this.$route.params;
       let { from } = this.$route.query;
       if (this.bhbz) {
@@ -216,8 +249,10 @@ export default {
     }
   },
   activated() {
-    this.userType =this.$store.state.user.userInfo&&this.$store.state.user.userInfo.userTypes;
-    this.showBtn =( this.form.status!=3&&this.userType=='0');
+    this.userType =
+      this.$store.state.user.userInfo &&
+      this.$store.state.user.userInfo.userTypes;
+    this.showBtn = this.form.status != 3 && this.userType == "0";
     this.getAssetsDetail();
     getKeepUserSelect().then(res => {
       this.keepUserArr = res.data;
@@ -241,6 +276,10 @@ export default {
 }
 .model-center {
   text-align: center;
+}
+.wx-item {
+  box-shadow: inset 0px 0px 18px 0px #003f8047;
+  margin-top: 20px;
 }
 </style>
 

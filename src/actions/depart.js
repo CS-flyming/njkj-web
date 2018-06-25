@@ -190,3 +190,18 @@ export function getParrolDetail(id) {
 export function getIndexData(params) {
   return $axios.post("/data/chart", params);
 }
+
+/**
+ * 删除
+ * @param {*} id
+ */
+export function deleteKeep(id) {
+  return $axios.post(`/keep/delete/${id}`);
+}
+
+/**
+ * 详情
+ */
+export function getKeepDetail(id) {
+  return $axios.post(`/keep/find/${id}`);
+}

@@ -14,7 +14,7 @@
                                 <h3>维修信息</h3><span :style="{margin: '0 10px'}">记录时间：最近{{filter.day}}天</span> | <span :style="{margin: '0 10px'}">当前时间：{{currentTime}}</span> 
                             </div>
                             <div class="to-do-list-con">
-                                <div class="todo-item finish">
+                                <div class="todo-item finish" @click="goUrl('finish')">
                                     <div class="icon-ct">
                                         <img src="./wancheng.png" alt="">
                                     </div>
@@ -23,7 +23,7 @@
                                          <p class="num">{{chartData.finish}}</p>
                                      </div>
                                 </div>
-                                <div class="todo-item refuse">
+                                <div class="todo-item refuse" @click="goUrl('refuse')">
                                     <div class="icon-ct">
                                         <img src="./bohui.png" alt="">
                                     </div>
@@ -41,7 +41,7 @@
                                 <h3>待办事项</h3><span :style="{margin: '0 10px'}">实时更新</span> 
                             </div>
                             <div class="to-do-list-con">
-                                <div class="todo-item verify">
+                                <div class="todo-item verify" @click="goUrl('verify')">
                                     <div class="icon-ct">
                                         <img src="./shenhe.png" alt="">
                                      </div>
@@ -50,7 +50,7 @@
                                          <p class="num">{{chartData.verify}}</p>
                                      </div>
                                 </div>
-                                <div class="todo-item keeping">
+                                <div class="todo-item keeping" @click="goUrl('keeping')">
                                     <div class="icon-ct">
                                         <img src="./weixiu.png" alt="">
                                     </div>
@@ -147,6 +147,25 @@ export default {
     }
   },
   methods: {
+    goUrl(type) {
+      let name = "";
+      if (type == "finish") {
+        name = "keep_speed_finishi";
+      }
+      if (type == "refuse") {
+        name = "keep_refuse";
+      }
+      if (type == "verify") {
+        name = "keep_verify";
+      }
+      if (type == "keeping") {
+        name = "keep_speed_wait";
+      }
+      name &&
+        this.$router.push({
+          name
+        });
+    },
     changeTabs(activeTab) {
       this.filter.status = activeTab;
     },

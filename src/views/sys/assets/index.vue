@@ -40,10 +40,6 @@ export default {
       loading: false,
       columns: [
         {
-          key: "number",
-          title: "编号"
-        },
-        {
           key: "assetsinfo",
           title: "资产基本信息",
           render: (h, params) => {
@@ -80,7 +76,7 @@ export default {
                 "Button",
                 {
                   props: {
-                    type: "primary",
+                    type: "primary"
                   },
                   style: {
                     marginRight: "5px"
@@ -105,7 +101,7 @@ export default {
                 "Button",
                 {
                   props: {
-                    type: "warning",
+                    type: "warning"
                   },
                   style: {
                     marginRight: "5px"
@@ -137,9 +133,9 @@ export default {
                   on: {
                     "on-ok": () => {
                       deleteAssetsById(params.row.id).then(res => {
-                          this.$lf.message("删除成功", "success");
-                          this.loadData();
-                        });
+                        this.$lf.message("删除成功", "success");
+                        this.loadData();
+                      });
                     }
                   }
                 },
@@ -158,7 +154,7 @@ export default {
                     "删除"
                   )
                 ]
-              ),
+              )
             ]);
           }
         }

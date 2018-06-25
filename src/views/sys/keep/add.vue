@@ -40,7 +40,12 @@
             <FormItem label="问题描述" prop="info">
                 <Input v-model="form.info" type="textarea" placeholder="问题描述"  />
             </FormItem>
-            <FormItem>
+            <FormItem label="选择维修人员" v-if="userType==0" prop="keepUserId">
+                <Select  v-model="form.keepUserId" >
+                    <Option v-for="item in keepUserArr" :key="item.id" :value="item.id" >{{item.name}}</Option>
+                </Select>
+            </FormItem>
+            <FormItem >
                 <Button type="primary" :loading="loading" html-type="submit">提交</Button>
             </FormItem>
         </Form>
@@ -50,12 +55,13 @@
 <script>
 import { closeCurrentErrPage } from "@/constants/constant";
 import departSelector from "components/depart-selector";
-import { addOrUpdateKeep } from "@/actions/depart";
+import { addOrUpdateKeep, getKeepUserSelect } from "@/actions/depart";
 export default {
   name: "keep-apply-add",
   data() {
     return {
       loading: false,
+      keepUserArr: [],
       form: {
         name: "",
         number: "",
@@ -64,7 +70,8 @@ export default {
         areaId: "",
         person: "",
         phone: "",
-        info: ""
+        info: "",
+        keepUserId: ""
       },
       rules: {
         info: [
@@ -94,9 +101,21 @@ export default {
             message: "请输入联系电话",
             trigger: "blur"
           }
+        ],
+        keepUserId: [
+          {
+            required: true,
+            message: "请选择维修人员",
+            trigger: "change"
+          }
         ]
       }
     };
+  },
+  computed: {
+    userType() {
+      return this.$store.state.user.userInfo.userTypes;
+    }
   },
   methods: {
     submit(e) {
@@ -118,6 +137,11 @@ export default {
         }
       });
     }
+  },
+  created() {
+    getKeepUserSelect().then(res => {
+      this.keepUserArr = res.data;
+    });
   },
   components: {
     departSelector

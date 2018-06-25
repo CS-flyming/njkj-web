@@ -5,11 +5,11 @@ import store from "../store";
 import env from "../../build/env";
 import qs from "qs";
 export const ApiUrl =
-  env === "development" // "http://172.16.7.119:8080/zjhb"
+  env === "development"
     ? "http://106.14.180.49:9001"
     : env === "production"
-      ? "http://106.14.180.49:9001"
-      : "http://120.77.147.241:10000/mock/59db10974720a62cc0517952";
+      ? ""
+      : "http://120.77.147.241:10000/mock/59db10974720a62cc0517952"; // "http://172.16.7.119:8080/zjhb"
 
 const uploadMaxSize = 1024;
 export const uploadConfig = {
@@ -119,8 +119,7 @@ export function closeCurrentErrPage(vm, pathname) {
   });
 }
 export function downloadByForm(apiUrl, params, method) {
-  console.log(apiUrl);
-  let url = `${ApiUrl}/${apiUrl}`;
+  let url = `${location.origin}/${apiUrl}`;
   var form = document.createElement("form");
   form.style.display = "none";
   form.action = url;

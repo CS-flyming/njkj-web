@@ -75,34 +75,9 @@ export default {
         {
           type: "action",
           title: "操作",
-          width: 240,
+          width: 180,
           render: (h, params) => {
             return h("div", [
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "primary"
-                  },
-                  style: {
-                    marginRight: "5px"
-                  },
-                  on: {
-                    click: () => {
-                      this.$router.push({
-                        name: "check-detail-edit",
-                        params: {
-                          id: params.row.id
-                        },
-                        query: {
-                          from: this.$route.name
-                        }
-                      });
-                    }
-                  }
-                },
-                "编辑"
-              ),
               //   h(
               //     "Button",
               //     {

@@ -33,7 +33,7 @@
 <script>
 import pagination from "components/pagination";
 import departSelector from "components/depart-selector";
-import { getKeepAdminRefuse } from "@/actions/depart";
+import { getKeepAdminRefuse, deleteKeep } from "@/actions/depart";
 export default {
   name: "keep_refuse",
   data() {
@@ -71,7 +71,7 @@ export default {
         {
           type: "action",
           title: "操作",
-          //   width: 180,
+          width: 180,
           render: (h, params) => {
             return h("div", [
               //   h(
@@ -79,7 +79,7 @@ export default {
               //     {
               //       props: {
               //         type: "success",
-              //        
+              //
               //       },
               //       style: {
               //         marginRight: "5px"
@@ -105,7 +105,7 @@ export default {
               //     {
               //       props: {
               //         type: "error",
-              //        
+              //
               //       },
               //       style: {
               //         marginRight: "5px"
@@ -130,8 +130,7 @@ export default {
                 "Button",
                 {
                   props: {
-                    type: "primary",
-                  
+                    type: "primary"
                   },
                   on: {
                     click: () => {
@@ -149,6 +148,25 @@ export default {
                   }
                 },
                 "详情"
+              ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "error"
+                  },
+                  on: {
+                    click: () => {
+                      this.$lf.confirm("是否确认删除？", () => {
+                        deleteKeep(params.row.id).then(res => {
+                          this.$lf.message("删除成功", "success");
+                          this.loadData();
+                        });
+                      });
+                    }
+                  }
+                },
+                "删除"
               )
             ]);
           }
