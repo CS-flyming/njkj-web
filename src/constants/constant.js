@@ -6,7 +6,8 @@ import env from "../../build/env";
 import qs from "qs";
 export const ApiUrl =
   env === "development"
-    ? "http://106.14.180.49:9001"
+    ? // ? "http://106.14.180.49:9001"
+      "http://172.16.7.122:9001"
     : env === "production"
       ? ""
       : "http://120.77.147.241:10000/mock/59db10974720a62cc0517952"; // "http://172.16.7.119:8080/zjhb"
@@ -119,7 +120,10 @@ export function closeCurrentErrPage(vm, pathname) {
   });
 }
 export function downloadByForm(apiUrl, params, method) {
-  let url = `${location.origin}/${apiUrl}`;
+  let url =
+    env === "development"
+      ? `${ApiUrl}/${apiUrl}`
+      : `${location.origin}/${apiUrl}`;
   var form = document.createElement("form");
   form.style.display = "none";
   form.action = url;

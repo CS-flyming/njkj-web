@@ -18,6 +18,7 @@
         </Card>
         <div class="data-control">
             <Button type="primary" @click="$router.push({ name: 'sys-manager-add' })">新建用户</Button>
+            <Button type="primary" @click="$downloadByForm('root/user/down',filter)">导出</Button>
         </div>
         <Table :loading="loading" border stripe :columns="columns" :data="data"></Table>
         <pagination :total="total" :limit.sync="filter.limit" :offset.sync="filter.offset" @on-load="loadData"></pagination>
@@ -39,11 +40,11 @@ export default {
       columns: [
         {
           key: "name",
-          title: "登录账号",
+          title: "登录账号"
         },
         {
           key: "typesDesc",
-          title: "所属角色",
+          title: "所属角色"
         },
         {
           title: "角色信息",
@@ -105,7 +106,7 @@ export default {
                 "Button",
                 {
                   props: {
-                    type: "primary",
+                    type: "primary"
                   },
                   on: {
                     click: () => {
@@ -122,8 +123,8 @@ export default {
                   }
                 },
                 "编辑"
-              ),
-            ])
+              )
+            ]);
           }
         }
       ],

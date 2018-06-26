@@ -23,7 +23,8 @@
             </Form>
         </Card>
         <div class="data-control">
-            <Button type="primary" @click="$router.push({ name: 'assets-add' })">维修单申请</Button>
+            <!-- <Button type="primary" @click="$router.push({ name: 'assets-add' })">维修单申请</Button> -->
+            <Button type="primary" @click="$downloadByForm('keep/my/down',filter)">导出</Button>
         </div>
         <Table :loading="loading" border stripe :columns="columns" :data="data"></Table>
         <pagination :total="total" :limit.sync="filter.limit" :offset.sync="filter.offset" @on-load="loadData"></pagination>

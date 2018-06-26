@@ -23,7 +23,8 @@
             </Form>
         </Card>
         <div class="data-control">
-            <Button type="primary" @click="$router.push({ name: 'keep-apply-add',query:{name:$route.name }})">维修单申请</Button>
+            <!-- <Button type="primary" @click="$router.push({ name: 'keep-apply-add',query:{name:$route.name }})">维修单申请</Button> -->
+            <Button type="primary" @click="$downloadByForm('keep/finish/down',filter)">导出</Button>
         </div>
         <Table :loading="loading" border stripe :columns="columns" :data="data"></Table>
         <pagination :total="total" :limit.sync="filter.limit" :offset.sync="filter.offset" @on-load="loadData"></pagination>
@@ -79,7 +80,7 @@ export default {
               //     {
               //       props: {
               //         type: "success",
-              //         
+              //
               //       },
               //       style: {
               //         marginRight: "5px"
@@ -105,7 +106,7 @@ export default {
               //     {
               //       props: {
               //         type: "error",
-              //         
+              //
               //       },
               //       style: {
               //         marginRight: "5px"
@@ -130,8 +131,7 @@ export default {
                 "Button",
                 {
                   props: {
-                    type: "primary",
-                    
+                    type: "primary"
                   },
                   on: {
                     click: () => {
@@ -141,7 +141,6 @@ export default {
                           id: params.row.id
                         },
                         query: {
-                          item: JSON.stringify(params.row),
                           from: this.$route.name
                         }
                       });

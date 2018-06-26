@@ -24,6 +24,7 @@
         </Card>
         <div class="data-control">
             <Button type="primary" @click="$router.push({ name: 'check-add',query:{name:$route.name }})">新增异常记录</Button>
+            <Button type="primary" @click="$downloadByForm('patrol/auto/down',filter)">导出</Button>
         </div>
         <Table :loading="loading" border stripe :columns="columns" :data="data"></Table>
         <pagination :total="total" :limit.sync="filter.limit" :offset.sync="filter.offset" @on-load="loadData"></pagination>
